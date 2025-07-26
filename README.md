@@ -1,1 +1,1 @@
-# Sistema de Gestao de Manutencao Industrial
+# Sistema de Gestão de Manutenção Industrial
