@@ -21,6 +21,7 @@ jobs:
 
       - name: Build Maven sem testes
         run: mvn clean package -DskipTests
+        working-directory: identidade-acesso
 
       - name: Definir versão dinâmica (número do build)
         run: echo "VERSION=0.0.${GITHUB_RUN_NUMBER}" >> $GITHUB_ENV
