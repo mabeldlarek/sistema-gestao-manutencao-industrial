@@ -1,0 +1,2 @@
+microsservicos/identidade-acesso/src/main/java/com/projetos/manutencao/identidade_acesso/dto/auth/FuncionárioDTO.java
+microsservicos/identidade-acesso/src/main/java/com/projetos/manutencao/identidade_acesso/dto/auth/UsuarioDTO.java
