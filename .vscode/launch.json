@@ -1,0 +1,25 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "MaterialEstoqueApplication",
+      "request": "launch",
+      "mainClass": "com.projetos.manutencao.material_estoque.MaterialEstoqueApplication",
+      "projectName": ""
+    },
+    {
+      "type": "java",
+      "name": "Attach to Remote Program",
+      "request": "attach",
+      "hostName": "localhost",
+      "port": 5005
+    },
+    {
+      "type": "java",
+      "name": "Launch Local Java File",
+      "request": "launch",
+      "mainClass": "${file}"
+    }
+  ]
+}

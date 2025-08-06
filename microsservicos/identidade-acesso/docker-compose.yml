@@ -6,12 +6,22 @@ services:
     container_name: ct-identidade-acesso
     ports:
       - "${APP_PORT}:8080"
+<<<<<<< HEAD
+=======
+      - "5005:5005"
+>>>>>>> dev
     environment:
       SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
       SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
       SPRING_JPA_HIBERNATE_DDL_AUTO: ${SPRING_JPA_HIBERNATE_DDL_AUTO}
       SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+<<<<<<< HEAD
+=======
+      SPRING_DATA_MONGODB_URI: ${SPRING_DATA_MONGODB_URI}
+      JAVA_TOOL_OPTIONS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+
+>>>>>>> dev
     depends_on:
       - db
 
@@ -27,5 +37,24 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
+<<<<<<< HEAD
 volumes:
   pgdata:
+=======
+  mongo:
+    image: mongo:6
+    container_name: ct-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodata:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      
+
+volumes:
+  pgdata:
+  mongodata:
+>>>>>>> dev
