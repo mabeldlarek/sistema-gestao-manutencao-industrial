@@ -3,6 +3,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "MaterialEstoqueApplication",
+      "request": "launch",
+      "mainClass": "com.projetos.manutencao.material_estoque.MaterialEstoqueApplication",
+      "projectName": ""
+    },
+    {
+      "type": "java",
       "name": "Attach to Remote Program",
       "request": "attach",
       "hostName": "localhost",

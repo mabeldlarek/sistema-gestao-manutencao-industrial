@@ -1,0 +1,6 @@
+{
+    "java.project.sourcePaths": [
+        "microsservicos/material-estoque"
+    ],
+    "java.project.explorer.showNonJavaResources": false
+}
