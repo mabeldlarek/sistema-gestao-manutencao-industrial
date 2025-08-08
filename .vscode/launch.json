@@ -3,6 +3,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "AtivosApplication",
+      "request": "launch",
+      "mainClass": "com.projetos.manutencao.ativos.AtivosApplication",
+      "projectName": "ativos"
+    },
+    {
+      "type": "java",
       "name": "MaterialEstoqueApplication",
       "request": "launch",
       "mainClass": "com.projetos.manutencao.material_estoque.MaterialEstoqueApplication",

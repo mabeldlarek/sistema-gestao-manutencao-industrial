@@ -3,5 +3,6 @@
         "microsservicos/material-estoque"
     ],
     "java.project.explorer.showNonJavaResources": false,
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "java.compile.nullAnalysis.mode": "automatic"
 }
