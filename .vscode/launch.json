@@ -3,6 +3,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "OrdemManutencaoApplication",
+      "request": "launch",
+      "mainClass": "com.projetos.manutencao.ordem_manutencao.OrdemManutencaoApplication",
+      "projectName": "ordem-manutencao"
+    },
+    {
+      "type": "java",
       "name": "AtivosApplication",
       "request": "launch",
       "mainClass": "com.projetos.manutencao.ativos.AtivosApplication",

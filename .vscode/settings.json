@@ -1,6 +1,7 @@
 {
     "java.project.sourcePaths": [
-        "microsservicos/material-estoque"
+        "microsservicos/material-estoque",
+        "microsservicos/conteudo/src/main/java/com/projetos/manutencao/conteudo"
     ],
     "java.project.explorer.showNonJavaResources": false,
     "java.configuration.updateBuildConfiguration": "interactive",
