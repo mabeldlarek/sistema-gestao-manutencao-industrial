@@ -1,12 +1,16 @@
 import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { LeftSidebarComponent } from './left-sidebar/left-sidebar.component';
+import { MainComponent } from './main/main.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  standalone: true,
+  imports: [LeftSidebarComponent, MainComponent],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrl:'./app.css'
 })
-export class App {
-  protected readonly title = signal('frontend');
+export class AppComponent {
+  isLeftSidebarCollapsed = signal<boolean>(false);
+  
 }
+
