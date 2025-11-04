@@ -3,6 +3,27 @@
   "configurations": [
     {
       "type": "java",
+      "name": "ConteudoApplication",
+      "request": "launch",
+      "mainClass": "com.projetos.manutencao.conteudo.ConteudoApplication",
+      "projectName": "conteudo"
+    },
+    {
+      "type": "java",
+      "name": "OrdemManutencaoApplication",
+      "request": "launch",
+      "mainClass": "com.projetos.manutencao.ordem_manutencao.OrdemManutencaoApplication",
+      "projectName": "ordem-manutencao"
+    },
+    {
+      "type": "java",
+      "name": "AtivosApplication",
+      "request": "launch",
+      "mainClass": "com.projetos.manutencao.ativos.AtivosApplication",
+      "projectName": "ativos"
+    },
+    {
+      "type": "java",
       "name": "MaterialEstoqueApplication",
       "request": "launch",
       "mainClass": "com.projetos.manutencao.material_estoque.MaterialEstoqueApplication",

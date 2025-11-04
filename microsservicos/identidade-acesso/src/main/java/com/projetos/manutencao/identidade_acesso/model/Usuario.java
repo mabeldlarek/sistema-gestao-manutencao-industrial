@@ -1,16 +1,10 @@
 package com.projetos.manutencao.identidade_acesso.model;
 
 import java.util.Date;
+import java.util.Set;
 import java.util.UUID;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
@@ -20,10 +14,10 @@ public class Usuario {
 
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.UUID)
-    @Column(name = "id", updatable = false, nullable = false)
+    @Column(name = "user_id", updatable = false, nullable = false)
     private UUID id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String nome;
 
     @Column(nullable = false, unique = true)
@@ -40,6 +34,10 @@ public class Usuario {
 
     @Column(nullable = false)
     private String tipoUsuario;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable( name = "tb_users_roles", joinColumns = @JoinColumn(name = "user_id" ), inverseJoinColumns = @JoinColumn(name= "role_id"))
+    private Set<Role> roles;
 
 
     @PrePersist
