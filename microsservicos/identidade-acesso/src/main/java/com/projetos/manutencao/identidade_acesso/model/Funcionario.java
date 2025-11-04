@@ -1,7 +1,9 @@
 package com.projetos.manutencao.identidade_acesso.model;
 
 import java.util.List;
+import java.util.UUID;
 
+import jakarta.persistence.Column;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -19,4 +21,7 @@ public class Funcionario {
     private String equipe;
     private List<String> especialidades;
     private String status;
+
+    private UUID usuarioId;
+
 }
