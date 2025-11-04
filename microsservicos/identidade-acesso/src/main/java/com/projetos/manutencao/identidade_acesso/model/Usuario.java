@@ -4,8 +4,10 @@ import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
 
+import com.projetos.manutencao.identidade_acesso.dto.auth.LoginRequestDTO;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Entity
 @Table(name = "usuario")
@@ -43,5 +45,9 @@ public class Usuario {
     @PrePersist
     protected void onCreate() {
         this.dataCriacao = new Date();
+    }
+
+    public boolean isLoginCorrect(LoginRequestDTO loginRequestDTO, PasswordEncoder passwordEncoder ) {
+        return passwordEncoder.matches(loginRequestDTO.password(), this.senha);
     }
 }
