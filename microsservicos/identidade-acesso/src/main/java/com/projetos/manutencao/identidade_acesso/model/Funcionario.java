@@ -14,7 +14,7 @@ import lombok.Data;
 public class Funcionario {
 
     @Id
-    private String id;
+    private Long id;
     private String matricula;
     private String nome;
     private String cargo;
@@ -24,4 +24,67 @@ public class Funcionario {
 
     private UUID usuarioId;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getMatricula() {
+        return matricula;
+    }
+
+    public void setMatricula(String matricula) {
+        this.matricula = matricula;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getCargo() {
+        return cargo;
+    }
+
+    public void setCargo(String cargo) {
+        this.cargo = cargo;
+    }
+
+    public String getEquipe() {
+        return equipe;
+    }
+
+    public void setEquipe(String equipe) {
+        this.equipe = equipe;
+    }
+
+    public List<String> getEspecialidades() {
+        return especialidades;
+    }
+
+    public void setEspecialidades(List<String> especialidades) {
+        this.especialidades = especialidades;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public UUID getUsuarioId() {
+        return usuarioId;
+    }
+
+    public void setUsuarioId(UUID usuarioId) {
+        this.usuarioId = usuarioId;
+    }
 }
