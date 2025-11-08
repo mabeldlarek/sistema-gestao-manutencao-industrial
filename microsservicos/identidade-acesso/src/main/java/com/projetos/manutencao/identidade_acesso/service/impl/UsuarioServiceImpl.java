@@ -1,12 +1,17 @@
 package com.projetos.manutencao.identidade_acesso.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
+import com.projetos.manutencao.identidade_acesso.dto.auth.FuncionarioDTO;
 import com.projetos.manutencao.identidade_acesso.dto.auth.UsuarioDTO;
+import com.projetos.manutencao.identidade_acesso.model.Funcionario;
 import com.projetos.manutencao.identidade_acesso.model.Role;
 import com.projetos.manutencao.identidade_acesso.repository.RoleRepository;
+import com.projetos.manutencao.identidade_acesso.repository.mongo.FuncionarioRepository;
+import com.projetos.manutencao.identidade_acesso.service.FuncionarioService;
 import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +28,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     private final UsuarioRepository repository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+
     @Autowired
     private ModelMapper modelMapper;
 
@@ -51,6 +57,9 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public void deleteById(UUID id) {
+        Usuario existente = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
+
         repository.deleteById(id);
     }
 
@@ -72,4 +81,5 @@ public class UsuarioServiceImpl implements UsuarioService {
     public List<Usuario> findAll() {
         return repository.findAll();
     }
+
 }

@@ -14,7 +14,7 @@ import lombok.Data;
 public class Funcionario {
 
     @Id
-    private Long id;
+    private String id;
     private String matricula;
     private String nome;
     private String cargo;
@@ -22,13 +22,13 @@ public class Funcionario {
     private List<String> especialidades;
     private String status;
 
-    private UUID usuarioId;
+    private String usuarioId;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -80,11 +80,12 @@ public class Funcionario {
         this.status = status;
     }
 
-    public UUID getUsuarioId() {
+    public String getUsuarioId() {
         return usuarioId;
     }
 
-    public void setUsuarioId(UUID usuarioId) {
+    public void setUsuarioId(String usuarioId) {
         this.usuarioId = usuarioId;
     }
 }
+
