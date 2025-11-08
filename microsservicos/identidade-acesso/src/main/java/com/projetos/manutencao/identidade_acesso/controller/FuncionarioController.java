@@ -3,6 +3,8 @@ package com.projetos.manutencao.identidade_acesso.controller;
 import java.util.List;
 
 import com.projetos.manutencao.identidade_acesso.dto.auth.FuncionarioDTO;
+import com.projetos.manutencao.identidade_acesso.service.UsuarioFuncionarioService;
+import com.projetos.manutencao.identidade_acesso.service.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,9 +24,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 @RequestMapping("/funcionarios")
 public class FuncionarioController {
     private final FuncionarioService service;
+    private final UsuarioFuncionarioService usuarioFuncionarioService;
 
-    public FuncionarioController(FuncionarioService service) {
+    public FuncionarioController(FuncionarioService service, UsuarioFuncionarioService usuarioFuncionarioService) {
         this.service = service;
+        this.usuarioFuncionarioService = usuarioFuncionarioService;
     }
 
     @GetMapping
@@ -34,7 +38,7 @@ public class FuncionarioController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Funcionario> getById(@PathVariable String id) {
-        return service.findById(Long.getLong(id))
+        return service.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -47,7 +51,8 @@ public class FuncionarioController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable String id) {
-        service.deleteById(Long.getLong(id));
+        usuarioFuncionarioService.deleteByIdUsuarioVinculado(id);
+
         return ResponseEntity.ok().build();
     }
 
@@ -56,4 +61,6 @@ public class FuncionarioController {
         service.update(funcionario);
         return ResponseEntity.ok().build();
     }
+
+
 }

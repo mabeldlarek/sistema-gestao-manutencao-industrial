@@ -9,7 +9,8 @@ import com.projetos.manutencao.identidade_acesso.model.Funcionario;
 import java.util.Optional;
 
 @Repository
-public interface FuncionarioRepository extends MongoRepository<Funcionario, Long> {
-    Optional<Funcionario> findByMatricula(String email);
+public interface FuncionarioRepository extends MongoRepository<Funcionario, String> {
+    Optional<Funcionario> findByMatricula(String matricula);
+    Optional<Funcionario> findByUsuarioId(String id);
 
 }

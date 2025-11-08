@@ -11,12 +11,15 @@ public interface FuncionarioService {
 
     public List<Funcionario> findAll();
 
-    public Optional<Funcionario> findById(Long id);
+    public Optional<Funcionario> findById(String id);
 
     public Funcionario save(FuncionarioDTO funcionario);
 
-    public void deleteById(Long id);
+    public void deleteById(String id);
 
     public void update(FuncionarioDTO funcionario);
 
+    public Optional<Funcionario> findByMatricula(String matricula);
+    public void vincularUsuarioAFuncionario(Funcionario funcionarioComUsuario);
+    public Optional<Funcionario> findByUsuarioID(String usuarioId);
 }
