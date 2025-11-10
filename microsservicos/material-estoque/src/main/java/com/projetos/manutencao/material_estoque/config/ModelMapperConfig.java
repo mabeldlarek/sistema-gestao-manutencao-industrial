@@ -1,4 +1,4 @@
-package com.projetos.manutencao.identidade_acesso.config;
+package com.projetos.manutencao.material_estoque.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;

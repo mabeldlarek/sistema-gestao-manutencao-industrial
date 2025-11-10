@@ -1,20 +1,11 @@
-package com.projetos.manutencao.material_estoque.model;
+package com.projetos.manutencao.material_estoque.dto;
 
-import java.util.UUID;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.validation.constraints.*;
 import lombok.Data;
+import org.antlr.v4.runtime.misc.NotNull;
 
-
-@Entity
 @Data
-public class Peca {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+public class PecaDTO {
     private String codigoPeca;
     private String nome;
     private String descricao;
@@ -25,14 +16,6 @@ public class Peca {
     private Double estoqueMinimo;
     private String localizacaoAlmoxarifado;
     private String unidadeMedida;
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
 
     public String getCodigoPeca() {
         return codigoPeca;
