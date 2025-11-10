@@ -1,0 +1,38 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: ct-postgres-dev
+    restart: always
+    environment:
+      POSTGRES_USER: app_user
+      POSTGRES_PASSWORD: app_pass
+      POSTGRES_DB: app_db2
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - microsservicos-dev
+
+  mongo:
+    image: mongo:6
+    container_name: ct-mongo-dev
+    restart: always
+    environment:
+      MONGO_INITDB_DATABASE: identidade_db
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodata:/data/db
+    networks:
+      - microsservicos-dev
+
+volumes:
+  pgdata:
+  mongodata:
+
+networks:
+  microsservicos-dev:
+    external: true
