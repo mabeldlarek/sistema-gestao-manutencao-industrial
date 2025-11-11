@@ -3,6 +3,33 @@
   <component name="CompilerConfiguration">
     <annotationProcessing>
       <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+      </profile>
+      <profile name="Annotation profile for identidade-acesso" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.34/lombok-1.18.34.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.34/lombok-1.18.34.jar" />
+        </processorPath>
+        <module name="identidade-acesso" />
+      </profile>
+      <profile name="Annotation profile for material-estoque" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
+        </processorPath>
+        <module name="ordem-manutencao" />
+        <module name="conteudo" />
+        <module name="material-estoque" />
+        <module name="ativos" />
+      </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="ativos" target="17" />
@@ -11,5 +38,14 @@
       <module name="material-estoque" target="17" />
       <module name="ordem-manutencao" target="17" />
     </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="ativos" options="-parameters" />
+      <module name="conteudo" options="-parameters" />
+      <module name="identidade-acesso" options="-parameters" />
+      <module name="material-estoque" options="-parameters" />
+      <module name="ordem-manutencao" options="-parameters" />
+    </option>
   </component>
 </project>
