@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="ativos" target="17" />
+      <module name="conteudo" target="17" />
+      <module name="identidade-acesso" target="17" />
+      <module name="material-estoque" target="17" />
+      <module name="ordem-manutencao" target="17" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
