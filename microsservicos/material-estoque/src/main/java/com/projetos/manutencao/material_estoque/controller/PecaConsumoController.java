@@ -3,6 +3,8 @@ package com.projetos.manutencao.material_estoque.controller;
 import java.util.List;
 import java.util.UUID;
 
+import com.projetos.manutencao.material_estoque.dto.PecaConsumoDTO;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +28,7 @@ public class PecaConsumoController {
     }
 
     @PostMapping
-    public ResponseEntity<PecaConsumo> salvar(@RequestBody PecaConsumo consumo) {
+    public ResponseEntity<PecaConsumo> salvar(@Valid @RequestBody PecaConsumoDTO consumo) {
         return ResponseEntity.ok(service.salvar(consumo));
     }
 
@@ -47,8 +49,7 @@ public class PecaConsumoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PecaConsumo> updateUsuario(@PathVariable UUID id, @RequestBody PecaConsumo consumo) {
-        consumo.setId(id);
+    public ResponseEntity<PecaConsumo> updateUsuario(@PathVariable UUID id, @RequestBody PecaConsumoDTO consumo) {
         PecaConsumo atualizado = service.salvar(consumo);
         return ResponseEntity.ok(atualizado);
     }

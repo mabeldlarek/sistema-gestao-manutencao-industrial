@@ -38,12 +38,6 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 
     public Funcionario save(FuncionarioDTO funcionarioDTO) {
         Funcionario funcionario = modelMapper.map(funcionarioDTO, Funcionario.class);
-        funcionario.setCargo(funcionarioDTO.getCargo());
-        funcionario.setEquipe(funcionarioDTO.getCargo());
-        funcionario.setEspecialidades(funcionarioDTO.getEspecialidades());
-        funcionario.setNome(funcionarioDTO.getNome());
-        funcionario.setStatus(funcionarioDTO.getStatus());
-
         repository.save(funcionario);
         return repository.save(funcionario);
     }

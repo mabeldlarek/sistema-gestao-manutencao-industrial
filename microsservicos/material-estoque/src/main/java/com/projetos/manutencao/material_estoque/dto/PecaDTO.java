@@ -1,38 +1,46 @@
-package com.projetos.manutencao.material_estoque.model;
+package com.projetos.manutencao.material_estoque.dto;
 
-import java.util.UUID;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.validation.constraints.*;
 import lombok.Data;
+import org.antlr.v4.runtime.misc.NotNull;
 
-
-@Entity
 @Data
-public class Peca {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+public class PecaDTO {
+    @NotBlank(message = "O código da peça é obrigatório.")
+    @Size(max = 50, message = "O código da peça deve ter no máximo 50 caracteres.")
     private String codigoPeca;
+
+    @NotBlank(message = "O nome da peça é obrigatório.")
+    @Size(max = 100, message = "O nome da peça deve ter no máximo 100 caracteres.")
     private String nome;
+
+    @Size(max = 255, message = "A descrição deve ter no máximo 255 caracteres.")
     private String descricao;
+
+    @NotBlank(message = "O fabricante é obrigatório.")
+    @Size(max = 100, message = "O fabricante deve ter no máximo 100 caracteres.")
     private String fabricante;
+
+    @NotBlank(message = "O número de catálogo é obrigatório.")
+    @Size(max = 50, message = "O número de catálogo deve ter no máximo 50 caracteres.")
     private String numeroCatalogo;
+
+    @PositiveOrZero(message = "O custo unitário deve ser maior ou igual a zero.")
     private Double custoUnitario;
+
+    @PositiveOrZero(message = "O estoque atual deve ser maior ou igual a zero.")
     private Double estoqueAtual;
+
+    @PositiveOrZero(message = "O estoque mínimo deve ser maior ou igual a zero.")
     private Double estoqueMinimo;
+
+    @NotBlank(message = "A localização é obrigatória.")
+    @Size(max = 100, message = "A localização deve ter no máximo 100 caracteres.")
     private String localizacaoAlmoxarifado;
+
+    @NotBlank(message = "A unidade de medida é obrigatória.")
+    @Size(max = 20, message = "A unidade de medida deve ter no máximo 20 caracteres.")
     private String unidadeMedida;
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
 
     public String getCodigoPeca() {
         return codigoPeca;

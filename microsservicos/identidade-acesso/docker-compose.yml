@@ -1,7 +1,5 @@
-version: '3.8'
-
 services:
-  app:
+  identidade-acesso:
     build: .
     container_name: ct-identidade-acesso
     ports:
@@ -14,10 +12,12 @@ services:
     depends_on:
       - db
       - mongo
+    networks:
+      - microsservicos-dev
 
   db:
     image: postgres:15
-    container_name: ct-postgres_db
+    container_name: ct-postgres-identidade
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
@@ -25,20 +25,28 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - pgdata-identidade:/var/lib/postgresql/data
+    networks:
+      - microsservicos-dev
 
   mongo:
     image: mongo:6
-    container_name: ct-mongo
-    ports:
-      - "27017:27017"
+    container_name: ct-mongo-identidade
     environment:
       MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    ports:
+      - "27017:27017"
     volumes:
-      - mongodata:/data/db
+      - mongodata-identidade:/data/db
+    networks:
+      - microsservicos-dev
 
 volumes:
-  pgdata:
-  mongodata:
+  pgdata-identidade:
+  mongodata-identidade:
+
+networks:
+  microsservicos-dev:
+    external: true

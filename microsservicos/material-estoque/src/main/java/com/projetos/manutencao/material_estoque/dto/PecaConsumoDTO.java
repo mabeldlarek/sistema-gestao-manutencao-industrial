@@ -1,35 +1,27 @@
-package com.projetos.manutencao.material_estoque.model;
+package com.projetos.manutencao.material_estoque.dto;
+
+import jakarta.validation.constraints.*;
+import lombok.Data;
 
 import java.util.Date;
 import java.util.UUID;
 
-import jakarta.persistence.*;
-import lombok.Data;
-
-@Entity
 @Data
-public class PecaConsumo {
-    @Id
-    private UUID id;
+public class PecaConsumoDTO {
+
+    @NotNull(message = "O ID da ordem de manutenção é obrigatório.")
     private UUID ordemManutencaoID;
+
+    @NotNull(message = "O ID da peça é obrigatório.")
     private UUID pecaID;
+
+    @NotNull(message = "A quantidade consumida é obrigatória.")
+    @DecimalMin(value = "0.01", message = "A quantidade consumida deve ser maior que zero.")
     private Double quantidade;
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date dataConsumo;
+
+    @NotNull(message = "O custo total do consumo é obrigatório.")
+    @DecimalMin(value = "0.0", inclusive = false, message = "O custo total deve ser maior que zero.")
     private Double custoTotalConsumo;
-
-    @PrePersist
-    protected void onCreate() {
-        this.dataConsumo = new Date();
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
 
     public UUID getOrdemManutencaoID() {
         return ordemManutencaoID;
@@ -53,14 +45,6 @@ public class PecaConsumo {
 
     public void setQuantidade(Double quantidade) {
         this.quantidade = quantidade;
-    }
-
-    public Date getDataConsumo() {
-        return dataConsumo;
-    }
-
-    public void setDataConsumo(Date dataConsumo) {
-        this.dataConsumo = dataConsumo;
     }
 
     public Double getCustoTotalConsumo() {
