@@ -1,6 +1,7 @@
 package com.projetos.manutencao.ativos.controller;
 import java.util.List;
 
+import com.projetos.manutencao.ativos.DTO.CriticidadeDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,4 +53,11 @@ public class CriticidadeController {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/calcular/{id}")
+    public ResponseEntity<String> getCriticidadeCalculada(@PathVariable String id, @RequestBody CriticidadeDTO criticidadeDTO) {
+        String criticidadeNivel = service.obterNivelCriticidade(id, criticidadeDTO);
+        return ResponseEntity.status(201).body(criticidadeNivel);
+    }
+
 }
