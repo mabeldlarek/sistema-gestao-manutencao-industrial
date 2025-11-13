@@ -64,7 +64,7 @@ public class CriticidadeServiceImpl implements CriticidadeService {
         double pontuacaoFinal = finalizarCalculoDeNivel();
         String nivelFinal = definirNivelFinal(pontuacaoFinal);
         Criticidade criticidade = modelMapper.map(criticidadeDTO, Criticidade.class);
-
+        criticidade.setNivel(nivelFinal);
         update(id, criticidade);
         return nivelFinal;
     }
