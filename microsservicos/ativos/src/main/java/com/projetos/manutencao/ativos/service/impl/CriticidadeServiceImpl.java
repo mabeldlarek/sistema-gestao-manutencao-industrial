@@ -63,7 +63,7 @@ public class CriticidadeServiceImpl implements CriticidadeService {
        Criticidade criticidade = modelMapper.map(criticidadeDTO, Criticidade.class);
 
        update(id, criticidade);
-       return nivelFinal;
+       return produtoCalculadoPorCategoria.toString();
     }
 
     public void iniciarCalculoDeNivel(CriticidadeDTO criticidadeDTO){
