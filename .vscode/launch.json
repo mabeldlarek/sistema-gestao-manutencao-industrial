@@ -3,6 +3,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "ConteudoApplication",
+      "request": "launch",
+      "mainClass": "com.projetos.manutencao.conteudo.ConteudoApplication",
+      "projectName": "conteudo"
+    },
+    {
+      "type": "java",
       "name": "OrdemManutencaoApplication",
       "request": "launch",
       "mainClass": "com.projetos.manutencao.ordem_manutencao.OrdemManutencaoApplication",

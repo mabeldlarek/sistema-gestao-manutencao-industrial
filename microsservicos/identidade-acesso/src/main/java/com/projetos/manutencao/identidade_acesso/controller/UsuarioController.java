@@ -2,8 +2,13 @@ package com.projetos.manutencao.identidade_acesso.controller;
 
 import java.util.UUID;
 
+import com.projetos.manutencao.identidade_acesso.dto.auth.FuncionarioDTO;
+import com.projetos.manutencao.identidade_acesso.dto.auth.UsuarioDTO;
+import com.projetos.manutencao.identidade_acesso.service.UsuarioFuncionarioService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +18,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.projetos.manutencao.identidade_acesso.model.Usuario;
 import com.projetos.manutencao.identidade_acesso.service.UsuarioService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,12 +27,15 @@ import jakarta.servlet.http.HttpServletRequest;
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
+    private final UsuarioFuncionarioService usuarioFuncionarioService;
 
-    public UsuarioController(UsuarioService usuarioService) {
+    public UsuarioController(UsuarioService usuarioService, UsuarioFuncionarioService usuarioFuncionarioService) {
         this.usuarioService = usuarioService;
+        this.usuarioFuncionarioService = usuarioFuncionarioService;
     }
 
     @GetMapping("usuarios")
+    @PreAuthorize("hasAuthority('SCOPE_admin')")
     public ResponseEntity<Object> getListaUsuarios(HttpServletRequest request) {
         return new ResponseEntity<>(usuarioService.findAll(), HttpStatus.OK);
 
@@ -40,13 +47,13 @@ public class UsuarioController {
     }
 
     @PostMapping("usuarios")
-    public ResponseEntity<Object> createUsuario(HttpServletRequest request, @RequestBody Usuario usuario) {
+    public ResponseEntity<Object> createUsuario(HttpServletRequest request, @Valid @RequestBody UsuarioDTO usuario) {
         usuarioService.save(usuario);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping("usuarios/{id}")
-    public ResponseEntity<Object> updateUsuario(HttpServletRequest request, @RequestBody Usuario usuario) {
+    public ResponseEntity<Object> updateUsuario(HttpServletRequest request, @Valid @RequestBody UsuarioDTO usuario) {
         usuarioService.update(usuario);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -54,6 +61,15 @@ public class UsuarioController {
     @DeleteMapping("usuarios/{id}")
     public ResponseEntity<Object> deleteUsuario(HttpServletRequest request, @PathVariable String id) {
         usuarioService.deleteById(UUID.fromString(id));
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping("/usuarios/funcionarios/{matricula}")
+    public ResponseEntity<Void> criarUsuarioParaFuncionario(
+            @PathVariable String matricula,
+            @Valid @RequestBody UsuarioDTO usuarioDTO
+    ) {
+        usuarioFuncionarioService.criarUsuarioParaFuncionário(matricula, usuarioDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

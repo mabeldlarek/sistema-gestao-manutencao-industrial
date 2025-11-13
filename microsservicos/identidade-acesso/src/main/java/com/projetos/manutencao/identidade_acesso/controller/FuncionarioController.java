@@ -2,6 +2,10 @@ package com.projetos.manutencao.identidade_acesso.controller;
 
 import java.util.List;
 
+import com.projetos.manutencao.identidade_acesso.dto.auth.FuncionarioDTO;
+import com.projetos.manutencao.identidade_acesso.service.UsuarioFuncionarioService;
+import com.projetos.manutencao.identidade_acesso.service.UsuarioService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,9 +24,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 @RequestMapping("/funcionarios")
 public class FuncionarioController {
     private final FuncionarioService service;
+    private final UsuarioFuncionarioService usuarioFuncionarioService;
 
-    public FuncionarioController(FuncionarioService service) {
+    public FuncionarioController(FuncionarioService service, UsuarioFuncionarioService usuarioFuncionarioService) {
         this.service = service;
+        this.usuarioFuncionarioService = usuarioFuncionarioService;
     }
 
     @GetMapping
@@ -38,20 +44,23 @@ public class FuncionarioController {
     }
 
     @PostMapping
-    public ResponseEntity<Funcionario> create(@RequestBody Funcionario funcionario) {
+    public ResponseEntity<Funcionario> create(@Valid @RequestBody FuncionarioDTO funcionario) {
         Funcionario saved = service.save(funcionario);
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable String id) {
-        service.deleteById(id);
+        usuarioFuncionarioService.deleteByIdUsuarioVinculado(id);
+
         return ResponseEntity.ok().build();
     }
 
     @PutMapping
-    public ResponseEntity<Void> put(@RequestBody Funcionario funcionario) {
+    public ResponseEntity<Void> put(@Valid @RequestBody FuncionarioDTO funcionario) {
         service.update(funcionario);
         return ResponseEntity.ok().build();
     }
+
+
 }
