@@ -119,7 +119,12 @@ public class CriticidadeServiceImpl implements CriticidadeService {
     }
 
     private String getNivelCriticidadeDeFrequenciaImpactoA(String frequencia, String impacto) {
-        Set<String> combinacoesNivelA = Set.of(Impacto.MEDIO.getDescricao() + "-" + Frequencia.MEDIA.getDescricao(), Impacto.ALTO.getDescricao() + "-" + Frequencia.ALTA.getDescricao(), Impacto.ALTO.getDescricao() + "-" + Frequencia.MEDIA.getDescricao(), Impacto.CATASTROFICO.getDescricao() + "-" + Frequencia.ALTA.getDescricao(), Impacto.CATASTROFICO.getDescricao() + "-" + Frequencia.MEDIA.getDescricao());
+        Set<String> combinacoesNivelA = Set.of(
+                Impacto.MEDIO.getDescricao() + "-" + Frequencia.ALTA.getDescricao(),
+                Impacto.ALTO.getDescricao() + "-" + Frequencia.ALTA.getDescricao(),
+                Impacto.ALTO.getDescricao() + "-" + Frequencia.MEDIA.getDescricao(),
+                Impacto.CATASTROFICO.getDescricao() + "-" + Frequencia.ALTA.getDescricao(),
+                Impacto.CATASTROFICO.getDescricao() + "-" + Frequencia.MEDIA.getDescricao());
 
         String chave = impacto + "-" + frequencia;
 
