@@ -1,51 +1,50 @@
-package com.projetos.manutencao.ativos.model;
+package com.projetos.manutencao.ativos.DTO;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Document(collection = "criticidades")
+import org.springframework.data.annotation.Id;
+import jakarta.validation.constraints.*;
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class Criticidade {
-    @Id
-    private String id;
+public class CriticidadeDTO {
 
-    private String nivel;
+    @Pattern(regexp = "^[A-D]$", message = "O nível deve ser uma letra de A a D")
+    private String nivelCriticidadeCalculado;
 
+    @NotNull
     private String impactoProducao;
+
+    @NotNull
     private String frequenciaImpactoProducao;
 
+    @NotNull
     private String impactoSeguranca;
+
+    @NotNull
     private String frequenciaImpactoSeguranca;
 
-    private String frequenciaImpactoAmbiental;
+    @NotNull
     private String impactoAmbiental;
 
-    private String frequenciaCustoReparo;
+    @NotNull
+    private String frequenciaImpactoAmbiental;
+
+    @NotNull
     private String custoReparo;
 
-    private String frequenciaFalha;
+    @NotNull
+    private String frequenciaCustoReparo;
+
+    @NotNull
     private String impactoFalha;
 
-    public String getId() {
-        return id;
+    @NotNull
+    private String frequenciaFalha;
+
+    public String getNivelCriticidadeCalculado() {
+        return nivelCriticidadeCalculado;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getNivel() {
-        return nivel;
-    }
-
-    public void setNivel(String nivel) {
-        this.nivel = nivel;
+    public void setNivelCriticidadeCalculado(String nivelCriticidadeCalculado) {
+        this.nivelCriticidadeCalculado = nivelCriticidadeCalculado;
     }
 
     public String getImpactoProducao() {
@@ -80,14 +79,6 @@ public class Criticidade {
         this.frequenciaImpactoSeguranca = frequenciaImpactoSeguranca;
     }
 
-    public String getFrequenciaImpactoAmbiental() {
-        return frequenciaImpactoAmbiental;
-    }
-
-    public void setFrequenciaImpactoAmbiental(String frequenciaImpactoAmbiental) {
-        this.frequenciaImpactoAmbiental = frequenciaImpactoAmbiental;
-    }
-
     public String getImpactoAmbiental() {
         return impactoAmbiental;
     }
@@ -96,12 +87,12 @@ public class Criticidade {
         this.impactoAmbiental = impactoAmbiental;
     }
 
-    public String getFrequenciaCustoReparo() {
-        return frequenciaCustoReparo;
+    public String getFrequenciaImpactoAmbiental() {
+        return frequenciaImpactoAmbiental;
     }
 
-    public void setFrequenciaCustoReparo(String frequenciaCustoReparo) {
-        this.frequenciaCustoReparo = frequenciaCustoReparo;
+    public void setFrequenciaImpactoAmbiental(String frequenciaImpactoAmbiental) {
+        this.frequenciaImpactoAmbiental = frequenciaImpactoAmbiental;
     }
 
     public String getCustoReparo() {
@@ -112,12 +103,12 @@ public class Criticidade {
         this.custoReparo = custoReparo;
     }
 
-    public String getFrequenciaFalha() {
-        return frequenciaFalha;
+    public String getFrequenciaCustoReparo() {
+        return frequenciaCustoReparo;
     }
 
-    public void setFrequenciaFalha(String frequenciaFalha) {
-        this.frequenciaFalha = frequenciaFalha;
+    public void setFrequenciaCustoReparo(String frequenciaCustoReparo) {
+        this.frequenciaCustoReparo = frequenciaCustoReparo;
     }
 
     public String getImpactoFalha() {
@@ -127,4 +118,14 @@ public class Criticidade {
     public void setImpactoFalha(String impactoFalha) {
         this.impactoFalha = impactoFalha;
     }
+
+    public String getFrequenciaFalha() {
+        return frequenciaFalha;
+    }
+
+    public void setFrequenciaFalha(String frequenciaFalha) {
+        this.frequenciaFalha = frequenciaFalha;
+    }
 }
+
+
