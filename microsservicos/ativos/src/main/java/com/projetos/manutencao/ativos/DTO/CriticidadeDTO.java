@@ -10,32 +10,43 @@ public class CriticidadeDTO {
     private String nivelCriticidadeCalculado;
 
     @NotNull
+    @NotBlank(message = "O impacto na produção é obrigatório")
     private String impactoProducao;
 
     @NotNull
+    @NotBlank(message = "A frequência de impacto na produção é obrigatoria")
     private String frequenciaImpactoProducao;
 
     @NotNull
+    @NotBlank(message = "O impacto na segurança é obrigatório")
     private String impactoSeguranca;
 
+    @NotBlank(message = "A frequência de impacto na segurança é obrigatoria")
     @NotNull
     private String frequenciaImpactoSeguranca;
 
+
+    @NotBlank(message = "O impacto ambiental é obrigatório")
     @NotNull
     private String impactoAmbiental;
 
+    @NotBlank(message = "A frequência de impacto ambiental é obrigatoria")
     @NotNull
     private String frequenciaImpactoAmbiental;
 
+    @NotBlank(message = "O impacto no custo de reparo é obrigatório")
     @NotNull
     private String custoReparo;
 
+    @NotBlank(message = "A frequência de impacto no custo de reparo é obrigatoria")
     @NotNull
     private String frequenciaCustoReparo;
 
+    @NotBlank(message = "O impacto da falha é obrigatório")
     @NotNull
     private String impactoFalha;
 
+    @NotBlank(message = "A frequência de falha é obrigatoria")
     @NotNull
     private String frequenciaFalha;
 

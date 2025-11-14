@@ -3,6 +3,7 @@ package com.projetos.manutencao.ativos.controller;
 
 import java.util.List;
 
+import com.projetos.manutencao.ativos.DTO.EquipamentoDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,8 +28,8 @@ public class EquipamentoController {
     }
 
     @PostMapping
-    public ResponseEntity<Equipamento> create(@RequestBody Equipamento equipamento) {
-        Equipamento created = service.create(equipamento);
+    public ResponseEntity<Equipamento> create(@RequestBody EquipamentoDTO equipamentoDTO) {
+        Equipamento created = service.create(equipamentoDTO);
         return ResponseEntity.status(201).body(created);
     }
 
@@ -44,8 +45,8 @@ public class EquipamentoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Equipamento> update(@PathVariable String id, @RequestBody Equipamento equipamento) {
-        Equipamento updated = service.update(id, equipamento);
+    public ResponseEntity<Equipamento> update(@PathVariable String id, @RequestBody EquipamentoDTO equipamentoDTO) {
+        Equipamento updated = service.update(id, equipamentoDTO);
         return updated == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(updated);
     }
 

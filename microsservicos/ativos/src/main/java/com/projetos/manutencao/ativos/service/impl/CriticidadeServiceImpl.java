@@ -11,6 +11,8 @@ import com.projetos.manutencao.ativos.enums.Frequencia;
 import com.projetos.manutencao.ativos.enums.Impacto;
 import com.projetos.manutencao.ativos.enums.Nivel;
 import com.projetos.manutencao.ativos.enums.Peso;
+import com.projetos.manutencao.ativos.model.Equipamento;
+import com.projetos.manutencao.ativos.repository.EquipamentoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,19 +27,31 @@ import com.projetos.manutencao.ativos.service.CriticidadeService;
 public class CriticidadeServiceImpl implements CriticidadeService {
 
     private final CriticidadeRepository repository;
+    private final EquipamentoRepository equipamentoRepository;
     private final HashMap<String, Double> produtoCalculadoPorCategoria = new HashMap<String, Double>();
     @Autowired
     private ModelMapper modelMapper;
 
-    public CriticidadeServiceImpl(CriticidadeRepository repository) {
+    public CriticidadeServiceImpl(CriticidadeRepository repository, EquipamentoRepository equipamentoRepository) {
         this.repository = repository;
+        this.equipamentoRepository = equipamentoRepository;
     }
 
     @Override
-    public Criticidade create(Criticidade criticidade) {
+    public Criticidade create(String idEquipamento, CriticidadeDTO criticidadeDTO) {
+        Criticidade criticidade = modelMapper.map(criticidadeDTO, Criticidade.class);
+
         if (criticidade.getId() == null || criticidade.getId().isBlank()) {
             criticidade.setId(UUID.randomUUID().toString());
+            criticidade.setNivel(obterNivelCriticidade(criticidade.getId(), criticidadeDTO));
         }
+
+        Equipamento equipamento = equipamentoRepository.findById(idEquipamento)
+                .orElseThrow(() -> new RuntimeException("Equipamento não encontrado"));
+
+        equipamento.setCriticidadeID(criticidade.getId());
+        equipamentoRepository.save(equipamento);
+
         return repository.save(criticidade);
     }
 
@@ -52,20 +66,20 @@ public class CriticidadeServiceImpl implements CriticidadeService {
     }
 
     @Override
-    public Criticidade update(String id, Criticidade criticidade) {
+    public Criticidade update(String id, CriticidadeDTO criticidadeDTO) {
+        Criticidade criticidade = modelMapper.map(criticidadeDTO, Criticidade.class);
+
         if (!repository.existsById(id)) return null;
+
         criticidade.setId(id);
+
         return repository.save(criticidade);
     }
 
-    @Override
     public String obterNivelCriticidade(String id, CriticidadeDTO criticidadeDTO) {
         iniciarCalculoDeNivel(criticidadeDTO);
         double pontuacaoFinal = finalizarCalculoDeNivel();
         String nivelFinal = definirNivelFinal(pontuacaoFinal);
-        Criticidade criticidade = modelMapper.map(criticidadeDTO, Criticidade.class);
-        criticidade.setNivel(nivelFinal);
-        update(id, criticidade);
         return nivelFinal;
     }
 

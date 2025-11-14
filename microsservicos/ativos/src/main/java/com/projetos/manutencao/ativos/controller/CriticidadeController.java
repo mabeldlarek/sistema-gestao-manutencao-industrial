@@ -25,15 +25,10 @@ public class CriticidadeController {
         this.service = service;
     }
 
-    @PostMapping
-    public ResponseEntity<Criticidade> create(@RequestBody Criticidade criticidade) {
-        Criticidade created = service.create(criticidade);
+    @PostMapping("equipamentos/{id}/calcular")
+    public ResponseEntity<Criticidade> create(@PathVariable String id, @RequestBody CriticidadeDTO criticidadeDTO) {
+        Criticidade created = service.create(id, criticidadeDTO);
         return ResponseEntity.status(201).body(created);
-    }
-
-    @GetMapping
-    public ResponseEntity<List<Criticidade>> listAll() {
-        return ResponseEntity.ok(service.findAll());
     }
 
     @GetMapping("/{id}")
@@ -43,8 +38,8 @@ public class CriticidadeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Criticidade> update(@PathVariable String id, @RequestBody Criticidade criticidade) {
-        Criticidade updated = service.update(id, criticidade);
+    public ResponseEntity<Criticidade> update(@PathVariable String id, @RequestBody CriticidadeDTO criticidadeDTO) {
+        Criticidade updated = service.update(id, criticidadeDTO);
         return updated == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(updated);
     }
 
@@ -52,12 +47,6 @@ public class CriticidadeController {
     public ResponseEntity<Void> delete(@PathVariable String id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
-    }
-
-    @PostMapping("/calcular/{id}")
-    public ResponseEntity<String> getCriticidadeCalculada(@PathVariable String id, @RequestBody CriticidadeDTO criticidadeDTO) {
-        String criticidadeNivel = service.obterNivelCriticidade(id, criticidadeDTO);
-        return ResponseEntity.status(201).body(criticidadeNivel);
     }
 
 }

@@ -4,6 +4,10 @@ package com.projetos.manutencao.ativos.service.impl;
 import java.util.List;
 import java.util.UUID;
 
+import com.projetos.manutencao.ativos.DTO.EquipamentoDTO;
+import com.projetos.manutencao.ativos.model.Criticidade;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.projetos.manutencao.ativos.model.Equipamento;
@@ -14,16 +18,21 @@ import com.projetos.manutencao.ativos.service.EquipamentoService;
 public class EquipamentoServiceImpl implements EquipamentoService {
 
     private final EquipamentoRepository repository;
+    @Autowired
+    private ModelMapper modelMapper;
 
     public EquipamentoServiceImpl(EquipamentoRepository repository) {
         this.repository = repository;
     }
 
     @Override
-    public Equipamento create(Equipamento equipamento) {
+    public Equipamento create(EquipamentoDTO equipamentoDTO) {
+        Equipamento equipamento = modelMapper.map(equipamentoDTO, Equipamento.class);
+
         if (equipamento.getId() == null || equipamento.getId().isBlank()) {
             equipamento.setId(UUID.randomUUID().toString());
         }
+
         return repository.save(equipamento);
     }
 
@@ -38,11 +47,14 @@ public class EquipamentoServiceImpl implements EquipamentoService {
     }
 
     @Override
-    public Equipamento update(String id, Equipamento equipamento) {
+    public Equipamento update(String id, EquipamentoDTO equipamentoDTO) {
+        Equipamento equipamento = modelMapper.map(equipamentoDTO, Equipamento.class);
+        equipamento.setId(id);
+
         if (!repository.existsById(id)) {
             return null;
         }
-        equipamento.setId(id);
+
         return repository.save(equipamento);
     }
 

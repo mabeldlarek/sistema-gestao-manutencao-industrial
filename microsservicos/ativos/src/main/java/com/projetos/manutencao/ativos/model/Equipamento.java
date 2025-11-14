@@ -1,5 +1,6 @@
 package com.projetos.manutencao.ativos.model;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -36,7 +37,7 @@ public class Equipamento {
 
     private Map<String, Object> parametrosOperacionais;
 
-    private List<Medidor> medidores;
+    private List<String> medidorIds = new ArrayList<>();
 
     private List<String> documentosAnexados;
 
@@ -156,12 +157,12 @@ public class Equipamento {
         this.parametrosOperacionais = parametrosOperacionais;
     }
 
-    public List<Medidor> getMedidores() {
-        return medidores;
+    public List<String> getMedidorIds() {
+        return medidorIds;
     }
 
-    public void setMedidores(List<Medidor> medidores) {
-        this.medidores = medidores;
+    public void setMedidorIds(List<String> medidorIds) {
+        this.medidorIds = medidorIds;
     }
 
     public List<String> getDocumentosAnexados() {
