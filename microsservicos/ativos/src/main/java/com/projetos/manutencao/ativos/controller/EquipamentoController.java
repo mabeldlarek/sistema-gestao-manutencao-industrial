@@ -44,6 +44,11 @@ public class EquipamentoController {
         return e == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(e);
     }
 
+    @GetMapping("/hierarquia/{codigo}")
+    public ResponseEntity<List<Equipamento>> getArvore(@PathVariable String codigo) {
+        return ResponseEntity.ok(service.getTreeEquipamentos(codigo));
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Equipamento> update(@PathVariable String id, @RequestBody EquipamentoDTO equipamentoDTO) {
         Equipamento updated = service.update(id, equipamentoDTO);

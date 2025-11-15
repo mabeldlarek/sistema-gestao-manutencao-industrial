@@ -18,9 +18,9 @@ public class MedidorController {
         this.service = service;
     }
 
-    @PostMapping
-    public ResponseEntity<Medidor> create(@PathVariable String id, @RequestBody MedidorDTO medidorDTO) {
-        Medidor criado = service.create(id, medidorDTO);
+    @PostMapping("/equipamento/{equipamentoId}")
+    public ResponseEntity<Medidor> create(@PathVariable String equipamentoId, @RequestBody MedidorDTO medidorDTO) {
+        Medidor criado = service.create(equipamentoId, medidorDTO);
 
         return ResponseEntity.status(201).body(criado);
     }

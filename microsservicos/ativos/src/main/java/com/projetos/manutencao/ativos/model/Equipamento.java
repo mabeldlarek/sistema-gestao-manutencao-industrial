@@ -43,7 +43,17 @@ public class Equipamento {
 
     private String imagemURL;
 
+    private String path;
+
     private String parentID;
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
 
     public String getId() {
         return id;

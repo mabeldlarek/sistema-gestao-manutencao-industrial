@@ -15,4 +15,6 @@ public interface EquipamentoService {
     Equipamento update(String id, EquipamentoDTO equipamentoDTO);
 
     void delete(String id);
+
+    List<Equipamento> getTreeEquipamentos(String codigo);
 }

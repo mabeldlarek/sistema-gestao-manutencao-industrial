@@ -33,6 +33,8 @@ public class EquipamentoServiceImpl implements EquipamentoService {
             equipamento.setId(UUID.randomUUID().toString());
         }
 
+        setPath(equipamento);
+
         return repository.save(equipamento);
     }
 
@@ -61,5 +63,22 @@ public class EquipamentoServiceImpl implements EquipamentoService {
     @Override
     public void delete(String id) {
         repository.deleteById(id);
+    }
+
+    @Override
+    public List<Equipamento> getTreeEquipamentos(String codigo) {
+        return repository.findByPathStartingWithOrderByPathAsc(codigo);
+    }
+
+    private void setPath(Equipamento equipamento){
+        String path = "";
+
+        if(equipamento.getParentID() != null){
+            Equipamento equipamentoPai = repository.findById(equipamento.getParentID())
+                    .orElseThrow(() -> new RuntimeException("Equipamento Pai não encontrado"));
+            path = equipamentoPai.getPath() + "/" + equipamento.getCodigo();
+            equipamento.setPath(path);
+        } else
+            equipamento.setPath(equipamento.getCodigo());
     }
 }

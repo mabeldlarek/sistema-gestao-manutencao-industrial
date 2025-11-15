@@ -47,6 +47,7 @@ public class MedidorServiceImpl implements MedidorService {
 
         equipamentoRepository.save(equipamento);
 
+        medidor.setEquipamentoId(equipamento.getId());
 
         return repository.save(medidor);
     }
