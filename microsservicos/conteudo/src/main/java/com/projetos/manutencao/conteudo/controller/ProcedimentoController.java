@@ -2,6 +2,9 @@ package com.projetos.manutencao.conteudo.controller;
 import java.util.List;
 import java.util.Optional;
 
+import com.projetos.manutencao.conteudo.DTO.PecaDTO;
+import com.projetos.manutencao.conteudo.DTO.ProcedimentoFormDataDTO;
+import com.projetos.manutencao.conteudo.feign.PecaClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,9 +23,16 @@ import com.projetos.manutencao.conteudo.service.ProcedimentoService;
 public class ProcedimentoController {
 
     private final ProcedimentoService service;
+    private final PecaClient pecaClient;
 
-    public ProcedimentoController(ProcedimentoService service) {
+    public ProcedimentoController(ProcedimentoService service, PecaClient pecaClient) {
         this.service = service;
+        this.pecaClient = pecaClient;
+    }
+
+    @GetMapping("/pecas")
+    public List<PecaDTO> listar() {
+        return pecaClient.listar();
     }
 
     @PostMapping

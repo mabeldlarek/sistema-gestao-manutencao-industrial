@@ -1,6 +1,7 @@
 package com.projetos.manutencao.conteudo.service.impl;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ public class ProcedimentoServiceImpl implements ProcedimentoService {
 
     @Override
     public Procedimento create(Procedimento procedimento) {
+        procedimento.setId(UUID.randomUUID().toString());
         return repository.save(procedimento);
     }
 

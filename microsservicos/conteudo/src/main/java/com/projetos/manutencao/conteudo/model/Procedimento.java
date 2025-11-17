@@ -28,7 +28,7 @@ public class Procedimento {
 
     private List<String> ferramentasNecessarias;
 
-    private List<String> pecasNecessarias;
+    private List<String> idPecasNecessarias;
 
     private Number tempoEstimado;
 
