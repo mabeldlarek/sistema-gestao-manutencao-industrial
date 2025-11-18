@@ -3,6 +3,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.projetos.manutencao.conteudo.DTO.PecaDTO;
+import com.projetos.manutencao.conteudo.DTO.ProcedimentoDTO;
 import com.projetos.manutencao.conteudo.DTO.ProcedimentoFormDataDTO;
 import com.projetos.manutencao.conteudo.feign.PecaClient;
 import org.springframework.http.ResponseEntity;
@@ -36,8 +37,8 @@ public class ProcedimentoController {
     }
 
     @PostMapping
-    public ResponseEntity<Procedimento> create(@RequestBody Procedimento procedimento) {
-        Procedimento criado = service.create(procedimento);
+    public ResponseEntity<Procedimento> create(@RequestBody ProcedimentoDTO procedimentoDTO) {
+        Procedimento criado = service.create(procedimentoDTO);
         return ResponseEntity.ok(criado);
     }
 
@@ -53,12 +54,11 @@ public class ProcedimentoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Procedimento> update(@PathVariable String id, @RequestBody Procedimento procedimento) {
+    public ResponseEntity<Procedimento> update(@PathVariable String id, @RequestBody ProcedimentoDTO procedimentoDTO) {
         if (!service.findById(id).isPresent()) {
             return ResponseEntity.notFound().build();
         }
-        procedimento.setId(id);
-        Procedimento atualizado = service.update(procedimento);
+        Procedimento atualizado = service.update(id, procedimentoDTO);
         return ResponseEntity.ok(atualizado);
     }
 

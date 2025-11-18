@@ -12,5 +12,4 @@ import java.util.List;
 public class ProcedimentoFormDataDTO {
     private List<PecaDTO> pecasDisponiveis;
 
-
 }
