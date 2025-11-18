@@ -63,4 +63,11 @@ public class PlanoManutencaoServiceImpl implements PlanoManutencaoService {
         repository.deleteById(id);
     }
 
+    private void getProfissionais(){
+
+    }
+
+    private void gerarOrdemManutencao(){}
+
+
 }
