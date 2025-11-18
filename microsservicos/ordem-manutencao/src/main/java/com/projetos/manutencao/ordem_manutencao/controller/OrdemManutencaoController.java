@@ -3,6 +3,7 @@ package com.projetos.manutencao.ordem_manutencao.controller;
 import java.util.List;
 import java.util.Optional;
 
+import com.projetos.manutencao.ordem_manutencao.DTO.OrdemManutencaoDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +28,7 @@ public class OrdemManutencaoController {
     }
 
     @PostMapping
-    public ResponseEntity<OrdemManutencao> create(@RequestBody OrdemManutencao ordem) {
+    public ResponseEntity<OrdemManutencao> create(@RequestBody OrdemManutencaoDTO ordem) {
         OrdemManutencao created = service.create(ordem);
         return ResponseEntity.ok(created);
     }
@@ -44,7 +45,7 @@ public class OrdemManutencaoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<OrdemManutencao> update(@PathVariable String id, @RequestBody OrdemManutencao ordem) {
+    public ResponseEntity<OrdemManutencao> update(@PathVariable String id, @RequestBody OrdemManutencaoDTO ordem) {
         OrdemManutencao updated = service.update(id, ordem);
         return ResponseEntity.ok(updated);
     }

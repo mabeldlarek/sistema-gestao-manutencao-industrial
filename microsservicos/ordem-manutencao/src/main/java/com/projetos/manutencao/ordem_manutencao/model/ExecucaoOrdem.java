@@ -1,8 +1,10 @@
 package com.projetos.manutencao.ordem_manutencao.model;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
+import com.projetos.manutencao.ordem_manutencao.enums.StatusExecucao;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -17,25 +19,19 @@ import lombok.NoArgsConstructor;
 public class ExecucaoOrdem {
 
     @Id
-    private String id; 
+    private String id;
     private String ordemManutencaoID;
     private String executorID;
     private Date dataInicio;
     private Date dataFim;
-    private Number tempoTrabalhado;
+    private List<PeriodoTrabalho> periodosDeTrabalho;
     private String descricaoTrabalhoExecutado;
     private String observacoesExecutor;
-    private String statusExecucao; 
+    private StatusExecucao statusExecucao;
     private String assinaturaDigital;
 
     private List<ChecklistItem> checklistItens;
-    private List<String> fotosAntes;  
+    private List<String> fotosAntes;
+    private List<String> fotosDepois;
 
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class ChecklistItem {
-        private String descricao;
-        private Boolean concluido;
-    }
 }

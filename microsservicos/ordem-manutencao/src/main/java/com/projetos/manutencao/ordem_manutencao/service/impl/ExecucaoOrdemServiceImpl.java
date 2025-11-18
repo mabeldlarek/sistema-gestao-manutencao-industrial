@@ -2,7 +2,11 @@ package com.projetos.manutencao.ordem_manutencao.service.impl;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
+import com.projetos.manutencao.ordem_manutencao.DTO.ExecucaoOrdemDTO;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.projetos.manutencao.ordem_manutencao.model.ExecucaoOrdem;
@@ -13,13 +17,18 @@ import com.projetos.manutencao.ordem_manutencao.service.ExecucaoOrdemService;
 public class ExecucaoOrdemServiceImpl implements ExecucaoOrdemService {
 
     private final ExecucaoOrdemRepository repository;
+    @Autowired
+    private ModelMapper modelMapper;
 
      public ExecucaoOrdemServiceImpl(ExecucaoOrdemRepository repository) {
         this.repository = repository;
     }
 
     @Override
-    public ExecucaoOrdem criarExecucao(ExecucaoOrdem execucao) {
+    public ExecucaoOrdem criarExecucao(ExecucaoOrdemDTO execucaoOrdemDTO) {
+        ExecucaoOrdem execucao = modelMapper.map(execucaoOrdemDTO, ExecucaoOrdem.class);
+        execucao.setId(UUID.randomUUID().toString());
+
         return repository.save(execucao);
     }
 
@@ -34,8 +43,9 @@ public class ExecucaoOrdemServiceImpl implements ExecucaoOrdemService {
     }
 
     @Override
-    public ExecucaoOrdem atualizarExecucao(String id, ExecucaoOrdem execucao) {
+    public ExecucaoOrdem atualizarExecucao(String id, ExecucaoOrdemDTO execucaoOrdemDTO) {
         if (repository.existsById(id)) {
+            ExecucaoOrdem execucao = modelMapper.map(execucaoOrdemDTO, ExecucaoOrdem.class);
             execucao.setId(id);
             return repository.save(execucao);
         }

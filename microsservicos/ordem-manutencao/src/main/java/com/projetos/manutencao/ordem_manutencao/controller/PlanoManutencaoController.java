@@ -2,6 +2,7 @@ package com.projetos.manutencao.ordem_manutencao.controller;
 
 import java.util.List;
 
+import com.projetos.manutencao.ordem_manutencao.DTO.PlanoManutencaoDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +28,7 @@ public class PlanoManutencaoController {
 
 
     @PostMapping
-    public ResponseEntity<PlanoManutencao> criar(@RequestBody PlanoManutencao plano) {
+    public ResponseEntity<PlanoManutencao> criar(@RequestBody PlanoManutencaoDTO plano) {
         PlanoManutencao criado = service.criarPlano(plano);
         return ResponseEntity.ok(criado);
     }
@@ -43,7 +44,7 @@ public class PlanoManutencaoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PlanoManutencao> atualizar(@PathVariable String id, @RequestBody PlanoManutencao plano) {
+    public ResponseEntity<PlanoManutencao> atualizar(@PathVariable String id, @RequestBody PlanoManutencaoDTO plano) {
         return ResponseEntity.ok(service.atualizarPlano(id, plano));
     }
 

@@ -2,6 +2,9 @@ package com.projetos.manutencao.ordem_manutencao.model;
 
 import java.util.Date;
 
+import com.projetos.manutencao.ordem_manutencao.enums.Prioridade;
+import com.projetos.manutencao.ordem_manutencao.enums.StatusOrdem;
+import com.projetos.manutencao.ordem_manutencao.enums.TipoManutencao;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -26,9 +29,9 @@ public class OrdemManutencao {
     private String equipamentoID; 
     private String descricaoProblema;
 
-    private String tipoManutencao;
-    private String status;
-    private String prioridade;
+    private TipoManutencao tipoManutencao;
+    private StatusOrdem status;
+    private Prioridade prioridade;
 
     private Date dataAbertura;
     private Date dataFechamento;

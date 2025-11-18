@@ -2,7 +2,12 @@ package com.projetos.manutencao.ordem_manutencao.service.impl;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
+import com.projetos.manutencao.ordem_manutencao.DTO.OrdemManutencaoDTO;
+import com.projetos.manutencao.ordem_manutencao.model.ExecucaoOrdem;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.projetos.manutencao.ordem_manutencao.model.OrdemManutencao;
@@ -14,14 +19,18 @@ import com.projetos.manutencao.ordem_manutencao.service.OrdemManutencaoService;
 public class OrdemManutencaoServiceImpl implements OrdemManutencaoService {
 
     private final OrdemManutencaoRepository repository;
+    @Autowired
+    private ModelMapper modelMapper;
 
     public OrdemManutencaoServiceImpl(OrdemManutencaoRepository repository) {
         this.repository = repository;
     }
 
     @Override
-    public OrdemManutencao create(OrdemManutencao ordem) {
-        return repository.save(ordem);
+    public OrdemManutencao create(OrdemManutencaoDTO ordemManutencaoDTO) {
+        OrdemManutencao ordemManutencao = modelMapper.map(ordemManutencaoDTO, OrdemManutencao.class);
+        ordemManutencao.setId(UUID.randomUUID().toString());
+        return repository.save(ordemManutencao);
     }
 
     @Override
@@ -35,31 +44,14 @@ public class OrdemManutencaoServiceImpl implements OrdemManutencaoService {
     }
 
     @Override
-    public OrdemManutencao update(String id, OrdemManutencao ordem) {
-        return repository.findById(id).map(existing -> {
-            existing.setNumeroOS(ordem.getNumeroOS());
-            existing.setEquipamentoID(ordem.getEquipamentoID());
-            existing.setDescricaoProblema(ordem.getDescricaoProblema());
-            existing.setTipoManutencao(ordem.getTipoManutencao());
-            existing.setStatus(ordem.getStatus());
-            existing.setPrioridade(ordem.getPrioridade());
-            existing.setDataAbertura(ordem.getDataAbertura());
-            existing.setDataFechamento(ordem.getDataFechamento());
-            existing.setSolicitanteID(ordem.getSolicitanteID());
-            existing.setResponsavelID(ordem.getResponsavelID());
-            existing.setProcedimentoID(ordem.getProcedimentoID());
-            existing.setObservacoes(ordem.getObservacoes());
-            existing.setCustoEstimado(ordem.getCustoEstimado());
-            existing.setCustoReal(ordem.getCustoReal());
-            existing.setTempoParadaEstimado(ordem.getTempoParadaEstimado());
-            existing.setTempoParadaReal(ordem.getTempoParadaReal());
-            existing.setModoFalhaID(ordem.getModoFalhaID());
-            existing.setCausaRaizID(ordem.getCausaRaizID());
-            return repository.save(existing);
-        }).orElseGet(() -> {
-            ordem.setId(id);
-            return repository.save(ordem);
-        });
+    public OrdemManutencao update(String id, OrdemManutencaoDTO ordemManutencaoDTO) {
+        OrdemManutencao ordemManutencao = modelMapper.map(ordemManutencaoDTO, OrdemManutencao.class);
+
+        if (repository.existsById(id)) {
+            repository.save(ordemManutencao);
+        }
+
+        return ordemManutencao;
     }
 
     @Override

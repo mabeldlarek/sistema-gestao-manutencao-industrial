@@ -3,6 +3,8 @@ package com.projetos.manutencao.ordem_manutencao.model;
 import java.util.Date;
 import java.util.List;
 
+import com.projetos.manutencao.ordem_manutencao.enums.StatusPlano;
+import com.projetos.manutencao.ordem_manutencao.enums.TipoManutencao;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -24,13 +26,13 @@ public class PlanoManutencao {
     private String equipamentoID; 
     private String procedimentoID; 
 
-    private String tipoManutencao;
+    private TipoManutencao tipoManutencao;
     private String frequenciaTipo;
     private Number frequenciaValor;
     private String frequenciaUnidade;
 
     private Date proximaDataGeracao;
-    private String status;
+    private StatusPlano status;
     private Date dataCriacao;
     private Date dataUltimaGeracao;
     private Boolean gerarAutomatico;
