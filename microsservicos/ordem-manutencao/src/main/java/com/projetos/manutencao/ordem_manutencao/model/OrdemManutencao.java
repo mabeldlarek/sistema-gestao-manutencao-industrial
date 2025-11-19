@@ -25,7 +25,7 @@ public class OrdemManutencao {
 
     @Indexed(unique = true)
     private String numeroOS;
-
+    private String planoManutencaoID;
     private String equipamentoID; 
     private String descricaoProblema;
 

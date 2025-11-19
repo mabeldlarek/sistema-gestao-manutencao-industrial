@@ -17,7 +17,7 @@ public class Medidor {
     private String id;
 
     private String equipamentoId;
-
+    private String codigo;
     private String nome;
     private TipoMedidor tipo;
     private UnidadeMedida unidade;

@@ -67,7 +67,9 @@ public class PlanoManutencaoServiceImpl implements PlanoManutencaoService {
 
     }
 
-    private void gerarOrdemManutencao(){}
+    private void gerarOrdemManutencao(){
+
+    }
 
 
 }

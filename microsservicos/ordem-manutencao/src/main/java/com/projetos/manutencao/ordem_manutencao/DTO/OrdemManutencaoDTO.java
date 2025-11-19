@@ -25,6 +25,8 @@ public class OrdemManutencaoDTO {
     @NotBlank(message = "O ID do equipamento é obrigatório.")
     private String equipamentoID;
 
+    private String planoManutencaoID;
+
     @NotBlank(message = "A descrição do problema é obrigatória.")
     private String descricaoProblema;
 

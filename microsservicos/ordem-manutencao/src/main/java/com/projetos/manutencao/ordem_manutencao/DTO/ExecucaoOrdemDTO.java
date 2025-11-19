@@ -43,4 +43,6 @@ public class ExecucaoOrdemDTO {
     @NotNull(message = "A lista de períodos de trabalho é obrigatória.")
     @Size(min = 1, message = "É necessário pelo menos um período de trabalho.")
     private List<PeriodoTrabalhoDTO> periodosDeTrabalho;
+
+
 }

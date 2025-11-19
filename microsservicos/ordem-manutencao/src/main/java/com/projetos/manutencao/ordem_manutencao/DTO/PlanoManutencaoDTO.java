@@ -1,7 +1,9 @@
 package com.projetos.manutencao.ordem_manutencao.DTO;
 
 import com.projetos.manutencao.ordem_manutencao.enums.StatusPlano;
+import com.projetos.manutencao.ordem_manutencao.enums.TipoFrequencia;
 import com.projetos.manutencao.ordem_manutencao.enums.TipoManutencao;
+import com.projetos.manutencao.ordem_manutencao.enums.UnidadeFrequencia;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -31,25 +33,22 @@ public class PlanoManutencaoDTO {
     private TipoManutencao tipoManutencao;
 
     @NotBlank(message = "O tipo de frequência é obrigatório.")
-    private String frequenciaTipo;
+    private TipoFrequencia frequenciaTipo;
 
-    @NotNull(message = "O valor da frequência é obrigatório.")
-    private Number frequenciaValor;
+    private Double frequenciaValor;
 
     @NotBlank(message = "A unidade de frequência é obrigatória.")
-    private String frequenciaUnidade;
-
-    private Date proximaDataGeracao;
+    private UnidadeFrequencia frequenciaUnidade;
 
     @NotNull(message = "O status do plano é obrigatório.")
     private StatusPlano status;
 
     private Date dataCriacao;
-    private Date dataUltimaGeracao;
 
     private Boolean gerarAutomatico;
+    private Boolean gerarAutomaticoMedidor;
+    private String codigoMedidor;
 
     private List<String> responsaveisPadraoID;
 
-    private String criticidadeMinimaGeracao;
 }

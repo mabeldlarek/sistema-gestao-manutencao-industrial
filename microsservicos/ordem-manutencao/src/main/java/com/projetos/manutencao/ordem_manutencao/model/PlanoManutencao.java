@@ -4,7 +4,9 @@ import java.util.Date;
 import java.util.List;
 
 import com.projetos.manutencao.ordem_manutencao.enums.StatusPlano;
+import com.projetos.manutencao.ordem_manutencao.enums.TipoFrequencia;
 import com.projetos.manutencao.ordem_manutencao.enums.TipoManutencao;
+import com.projetos.manutencao.ordem_manutencao.enums.UnidadeFrequencia;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -27,17 +29,17 @@ public class PlanoManutencao {
     private String procedimentoID; 
 
     private TipoManutencao tipoManutencao;
-    private String frequenciaTipo;
-    private Number frequenciaValor;
-    private String frequenciaUnidade;
+    private TipoFrequencia frequenciaTipo;
+    private Double frequenciaValor;
+    private UnidadeFrequencia frequenciaUnidade;
 
-    private Date proximaDataGeracao;
     private StatusPlano status;
     private Date dataCriacao;
-    private Date dataUltimaGeracao;
     private Boolean gerarAutomatico;
+    private Boolean gerarAutomaticoMedidor;
 
-    private List<String> responsaveisPadraoID; 
-    private String criticidadeMinimaGeracao;
+    private List<String> responsaveisPadraoID;
+    private String codigoMedidor;
+
 
 }
