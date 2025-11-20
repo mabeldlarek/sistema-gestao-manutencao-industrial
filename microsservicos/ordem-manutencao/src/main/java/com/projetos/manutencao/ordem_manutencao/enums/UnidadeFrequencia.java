@@ -27,8 +27,8 @@ public enum UnidadeFrequencia {
     METROS_POR_SEGUNDO("m/s"),
 
     RPM("rpm"),
-    DIA("D"),
-    SEMANA("S"),
+    DIA("DIA"),
+    SEMANA("SEM"),
     MES("MES"),
     ANO("ANO");
 

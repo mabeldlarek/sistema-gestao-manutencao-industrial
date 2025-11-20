@@ -1,12 +1,10 @@
-package com.projetos.manutencao.ordem_manutencao.feign;
 
-import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.UUID;
-
+/*
 @FeignClient(name = "identidade-service", url = "${services.identidade.url}")
 public interface FuncionarioClient {
 
@@ -16,4 +14,4 @@ public interface FuncionarioClient {
     @GetMapping
     List<FuncionarioDTO> listar();
 
-}
+}*/

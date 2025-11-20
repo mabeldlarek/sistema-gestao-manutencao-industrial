@@ -1,11 +1,16 @@
 package com.projetos.manutencao.ordem_manutencao.service.impl;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import com.projetos.manutencao.ordem_manutencao.DTO.OrdemManutencaoDTO;
+import com.projetos.manutencao.ordem_manutencao.DTO.PlanoManutencaoDTO;
+import com.projetos.manutencao.ordem_manutencao.enums.StatusOrdem;
 import com.projetos.manutencao.ordem_manutencao.model.ExecucaoOrdem;
+import com.projetos.manutencao.ordem_manutencao.model.PlanoManutencao;
+import com.projetos.manutencao.ordem_manutencao.repository.PlanoManutencaoRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,11 +24,15 @@ import com.projetos.manutencao.ordem_manutencao.service.OrdemManutencaoService;
 public class OrdemManutencaoServiceImpl implements OrdemManutencaoService {
 
     private final OrdemManutencaoRepository repository;
+    private final PlanoManutencaoRepository planoManutencaoRepository;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private OrdemManutencaoRepository repo;
 
-    public OrdemManutencaoServiceImpl(OrdemManutencaoRepository repository) {
+    public OrdemManutencaoServiceImpl(OrdemManutencaoRepository repository, PlanoManutencaoRepository planoManutencaoRepository) {
         this.repository = repository;
+        this.planoManutencaoRepository = planoManutencaoRepository;
     }
 
     @Override
@@ -59,5 +68,20 @@ public class OrdemManutencaoServiceImpl implements OrdemManutencaoService {
         repository.deleteById(id);
     }
 
+    public OrdemManutencao gerarOM(String idPM) {
+
+        PlanoManutencao pm = planoManutencaoRepository.findById(idPM).get();
+
+        OrdemManutencao om = OrdemManutencao.builder()
+                .numeroOS(UUID.randomUUID().toString())
+                .planoManutencaoID(pm.getId())
+                .equipamentoID(pm.getEquipamentoID())
+                .procedimentoID(pm.getProcedimentoID())
+                .status(StatusOrdem.ABERTA)
+                .dataAbertura(new Date())
+                .build();
+
+        return repo.save(om);
+    }
 
 }

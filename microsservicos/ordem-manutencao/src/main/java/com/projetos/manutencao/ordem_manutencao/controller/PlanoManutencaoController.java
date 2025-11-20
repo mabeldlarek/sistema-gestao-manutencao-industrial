@@ -3,7 +3,7 @@ package com.projetos.manutencao.ordem_manutencao.controller;
 import java.util.List;
 
 import com.projetos.manutencao.ordem_manutencao.DTO.PlanoManutencaoDTO;
-import com.projetos.manutencao.ordem_manutencao.feign.FuncionarioClient;
+//import com.projetos.manutencao.ordem_manutencao.feign.FuncionarioClient;
 import com.projetos.manutencao.ordem_manutencao.feign.FuncionarioDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,11 +23,10 @@ import com.projetos.manutencao.ordem_manutencao.service.PlanoManutencaoService;
 public class PlanoManutencaoController {
 
     private final PlanoManutencaoService service;
-    private final FuncionarioClient funcionarioClient;
+    //private final FuncionarioClient funcionarioClient;
 
-    public PlanoManutencaoController(PlanoManutencaoService service, FuncionarioClient funcionarioClient) {
+    public PlanoManutencaoController(PlanoManutencaoService service) {
         this.service = service;
-        this.funcionarioClient = funcionarioClient;
     }
 
     @PostMapping
@@ -36,10 +35,10 @@ public class PlanoManutencaoController {
         return ResponseEntity.ok(criado);
     }
 
-    @GetMapping("/funcionario")
+    /*@GetMapping("/funcionario")
     public List<FuncionarioDTO> listar() {
-        return funcionarioClient.listar();
-    }
+        //return funcionarioClient.listar();
+    }*/
 
     @GetMapping
     public ResponseEntity<List<PlanoManutencao>> listarTodos() {

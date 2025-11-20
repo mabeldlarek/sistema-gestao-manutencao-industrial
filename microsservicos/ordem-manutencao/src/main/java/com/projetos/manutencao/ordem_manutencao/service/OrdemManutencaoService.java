@@ -11,4 +11,5 @@ public interface  OrdemManutencaoService {
     List<OrdemManutencao> findAll();
     OrdemManutencao update(String id, OrdemManutencaoDTO ordemManutencaoDTO);
     void delete(String id);
+    OrdemManutencao gerarOM(String idPM);
 }

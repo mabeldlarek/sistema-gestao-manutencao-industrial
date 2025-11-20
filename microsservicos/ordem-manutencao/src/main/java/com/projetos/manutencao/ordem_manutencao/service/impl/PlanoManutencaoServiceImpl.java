@@ -1,5 +1,6 @@
 package com.projetos.manutencao.ordem_manutencao.service.impl;
     
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -22,7 +23,7 @@ public class PlanoManutencaoServiceImpl implements PlanoManutencaoService {
     private final PlanoManutencaoRepository repository;
     @Autowired
     private ModelMapper modelMapper;
-
+    @Autowired
     public PlanoManutencaoServiceImpl(PlanoManutencaoRepository repository) {
         this.repository = repository;
     }
@@ -63,13 +64,21 @@ public class PlanoManutencaoServiceImpl implements PlanoManutencaoService {
         repository.deleteById(id);
     }
 
+    public List<PlanoManutencao> buscarPlanosAgendados(Date agora) {
+        return repository.findByGerarOMAutomaticaTrueAndDataGeracaoAutomaticaOMLessThanEqual(agora);
+    }
+
     private void getProfissionais(){
 
     }
 
-    private void gerarOrdemManutencao(){
+
+    private void verificarPlanoGeracaoAutomatica(List <PlanoManutencaoDTO> listPlanosManutencao){
 
     }
 
+    private void verificarPlanoGeracaoAutomaticaPorMedidor(List <PlanoManutencaoDTO> listPlanosManutencao){
+
+    }
 
 }

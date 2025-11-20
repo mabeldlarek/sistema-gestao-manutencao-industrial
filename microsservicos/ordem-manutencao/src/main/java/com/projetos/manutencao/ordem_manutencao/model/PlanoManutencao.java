@@ -35,8 +35,9 @@ public class PlanoManutencao {
 
     private StatusPlano status;
     private Date dataCriacao;
-    private Boolean gerarAutomatico;
-    private Boolean gerarAutomaticoMedidor;
+    private Date dataGeracaoAutomaticaOM;
+    private Boolean gerarOMAutomatica;
+    private Boolean gerarOMAutomaticaMedidor;
 
     private List<String> responsaveisPadraoID;
     private String codigoMedidor;

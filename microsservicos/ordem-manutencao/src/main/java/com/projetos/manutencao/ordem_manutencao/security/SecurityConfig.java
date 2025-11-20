@@ -1,4 +1,4 @@
-package com.projetos.manutencao.ordem_manutencao.security;
+/*package com.projetos.manutencao.ordem_manutencao.security;
 
 
 import org.springframework.context.annotation.Bean;
@@ -33,4 +33,4 @@ public class SecurityConfig {
         String jwkSetUri = "http://localhost:8081/.well-known/jwks.json";
         return NimbusJwtDecoder.withJwkSetUri(jwkSetUri).build();
     }
-}
+}*/
