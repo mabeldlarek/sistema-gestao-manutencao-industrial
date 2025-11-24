@@ -6,7 +6,7 @@ public enum TipoFrequencia {
     VIBRACAO,
     UMIDADE,
     CORRENTE,
-    TENSÃO,
+    TENSAO,
     POTENCIA,
     FLUXO,
     NIVEL,

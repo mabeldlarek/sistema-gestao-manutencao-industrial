@@ -40,7 +40,7 @@ public class PlanoManutencao {
     private Boolean gerarOMAutomaticaMedidor;
 
     private List<String> responsaveisPadraoID;
-    private String codigoMedidor;
+    private String medidorId;
 
 
 }

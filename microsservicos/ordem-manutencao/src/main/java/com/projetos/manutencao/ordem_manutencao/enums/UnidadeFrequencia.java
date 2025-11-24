@@ -1,41 +1,46 @@
 package com.projetos.manutencao.ordem_manutencao.enums;
 
 public enum UnidadeFrequencia {
-    CELSIUS("°C"),
-    FAHRENHEIT("°F"),
-    KELVIN("K"),
+    CELSIUS("°C", TipoFrequencia.TEMPERATURA),
+    FAHRENHEIT("°F", TipoFrequencia.TEMPERATURA),
+    KELVIN("K", TipoFrequencia.TEMPERATURA),
 
-    BAR("bar"),
-    PSI("psi"),
-    PASCAL("Pa"),
+    BAR("bar", TipoFrequencia.PRESSAO),
+    PSI("psi", TipoFrequencia.PRESSAO),
+    PASCAL("Pa", TipoFrequencia.PRESSAO),
 
-    MMS("mm/s"),
-    G("g"),
+    MMS("mm/s", TipoFrequencia.VIBRACAO),
+    G("g", TipoFrequencia.VIBRACAO),
 
-    PORCENTAGEM("%"),
+    PORCENTAGEM("%", TipoFrequencia.UMIDADE),
 
-    AMPERE("A"),
+    AMPERE("A", TipoFrequencia.CORRENTE),
 
-    VOLT("V"),
+    VOLT("V", TipoFrequencia.TENSAO),
 
-    WATT("W"),
+    WATT("W", TipoFrequencia.POTENCIA),
 
-    LITROS_POR_MINUTO("L/min"),
+    LITROS_POR_MINUTO("L/min", TipoFrequencia.FLUXO),
 
-    METROS("m"),
+    METROS("m", TipoFrequencia.NIVEL),
 
-    METROS_POR_SEGUNDO("m/s"),
+    METROS_POR_SEGUNDO("m/s", TipoFrequencia.VELOCIDADE),
 
-    RPM("rpm"),
-    DIA("DIA"),
-    SEMANA("SEM"),
-    MES("MES"),
-    ANO("ANO");
+    RPM("rpm", TipoFrequencia.RPM),
+
+    DIA("DIA", TipoFrequencia.TEMPO),
+    SEMANA("SEM", TipoFrequencia.TEMPO),
+    MES("MES", TipoFrequencia.TEMPO),
+    ANO("ANO", TipoFrequencia.TEMPO),
+    HORAS("HORAS", TipoFrequencia.TEMPO);
 
     private final String simbolo;
 
-    UnidadeFrequencia(String simbolo) {
+    private final TipoFrequencia grandeza;
+
+    UnidadeFrequencia(String simbolo, TipoFrequencia grandeza) {
         this.simbolo = simbolo;
+        this.grandeza = grandeza;
     }
 
     public String getSimbolo() {

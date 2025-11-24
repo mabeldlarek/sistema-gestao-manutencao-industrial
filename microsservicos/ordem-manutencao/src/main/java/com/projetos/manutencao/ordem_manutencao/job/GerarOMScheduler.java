@@ -1,14 +1,18 @@
 package com.projetos.manutencao.ordem_manutencao.job;
 
+import com.projetos.manutencao.ordem_manutencao.DTO.MedidorDTO;
+import com.projetos.manutencao.ordem_manutencao.DTO.PlanoManutencaoDTO;
 import com.projetos.manutencao.ordem_manutencao.enums.UnidadeFrequencia;
+import com.projetos.manutencao.ordem_manutencao.feign.MedidorClient;
 import com.projetos.manutencao.ordem_manutencao.model.PlanoManutencao;
 import com.projetos.manutencao.ordem_manutencao.service.OrdemManutencaoService;
 import com.projetos.manutencao.ordem_manutencao.service.PlanoManutencaoService;
+import com.projetos.manutencao.ordem_manutencao.util.DateTimeUtils;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 
@@ -21,6 +25,12 @@ public class GerarOMScheduler {
     @Autowired
     private OrdemManutencaoService omService;
 
+    @Autowired
+    private MedidorClient medidorClient;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
     @Scheduled(fixedRate = 60000)
     public void verificarPlanos() {
 
@@ -29,35 +39,68 @@ public class GerarOMScheduler {
         List<PlanoManutencao> planos = planoService.buscarPlanosAgendados(agora);
 
         for (PlanoManutencao pm : planos) {
-            omService.gerarOM(pm.getId());
+            if (pm.getGerarOMAutomatica()) {
+                if (!pm.getDataGeracaoAutomaticaOM().after(agora))
+                {
+                    Date novaDataOm = calcularProximaDataGeracaoOmPreventiva(pm.getFrequenciaUnidade(), pm);
+                    pm.setDataGeracaoAutomaticaOM(novaDataOm);
+                    PlanoManutencaoDTO planoManutencaoDTO = modelMapper.map(pm, PlanoManutencaoDTO.class);
+
+                    planoService.atualizarPlano(pm.getId(), planoManutencaoDTO);
+
+                    omService.gerarOM(pm.getId());
+
+                    return;
+                }
+            }
+
+            if (pm.getGerarOMAutomaticaMedidor()) {
+                String medidorId = pm.getMedidorId();
+
+                if(isGerarOmCorretivaMedidor(pm.getFrequenciaValor(), medidorId)){
+                    omService.gerarOM(pm.getId());
+                    return;
+                }
+
+                if(isGerarOmPreditivaMedidor(pm.getFrequenciaValor(), medidorId)){
+                    omService.gerarOM(pm.getId());
+                    return;
+                }
+
+            }
         }
     }
 
-    private void calcularProximaDataGeração(UnidadeFrequencia uf, PlanoManutencao pm) {
+    private Date calcularProximaDataGeracaoOmPreventiva(UnidadeFrequencia uf, PlanoManutencao pm) {
+        return DateTimeUtils.calcularProximaData(
+                pm.getDataGeracaoAutomaticaOM(),
+                uf,
+                pm.getFrequenciaValor().intValue()
+        );
+    }
 
-        Date dataAtual = pm.getDataGeracaoAutomaticaOM();
-        int valor = pm.getFrequenciaValor().intValue();
+    private boolean isGerarOmPreditivaMedidor(Double pmValorFrequencia, String horimetroId){
+        MedidorDTO medidorDTO = medidorClient.buscar(horimetroId);
 
-        Date novaDataOm = null;
+        Double horimetroValorAtual = medidorDTO.getValorAtual();
 
-        switch (uf) {
-            case DIA:
-                novaDataOm = Date.from(dataAtual.toInstant().plus(valor, ChronoUnit.DAYS));
-                break;
+        if(horimetroValorAtual >= pmValorFrequencia){
+            return true;
+        }
+        return false;
+    }
 
-            case SEMANA:
-                novaDataOm = Date.from(dataAtual.toInstant().plus(valor, ChronoUnit.WEEKS));
-                break;
+    private boolean isGerarOmCorretivaMedidor(Double pmValorFrequencia, String horimetroId){
+        MedidorDTO medidorDTO = medidorClient.buscar(horimetroId);
 
-            case MES:
-                novaDataOm = Date.from(dataAtual.toInstant().plus(valor, ChronoUnit.MONTHS));
-                break;
+        Double horimetroValorAtual = medidorDTO.getValorAtual();
 
-            case ANO:
-                novaDataOm = Date.from(dataAtual.toInstant().plus(valor, ChronoUnit.YEARS));
-                break;
+        if(horimetroValorAtual > medidorDTO.getValorMaximo() || horimetroValorAtual < medidorDTO.getValorMinimo()){
+            return true;
         }
 
-        pm.setDataGeracaoAutomaticaOM(novaDataOm);
+        return false;
     }
+
+
 }

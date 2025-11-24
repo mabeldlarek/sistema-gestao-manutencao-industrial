@@ -4,5 +4,4 @@ public enum TipoManutencao {
     CORRETIVA,
     PREVENTIVA,
     PREDITIVA,
-    DETECTIVA
 }
