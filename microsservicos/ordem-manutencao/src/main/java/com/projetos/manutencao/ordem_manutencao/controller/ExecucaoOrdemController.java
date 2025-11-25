@@ -3,6 +3,8 @@ package com.projetos.manutencao.ordem_manutencao.controller;
 import java.util.List;
 
 import com.projetos.manutencao.ordem_manutencao.DTO.ExecucaoOrdemDTO;
+import com.projetos.manutencao.ordem_manutencao.DTO.ProcedimentoCheklistDTO;
+import com.projetos.manutencao.ordem_manutencao.feign.ProcedimentoClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;

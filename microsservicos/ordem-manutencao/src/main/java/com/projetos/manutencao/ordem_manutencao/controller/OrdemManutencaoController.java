@@ -3,7 +3,10 @@ package com.projetos.manutencao.ordem_manutencao.controller;
 import java.util.List;
 import java.util.Optional;
 
+import com.projetos.manutencao.ordem_manutencao.DTO.FuncionarioDTO;
 import com.projetos.manutencao.ordem_manutencao.DTO.OrdemManutencaoDTO;
+import com.projetos.manutencao.ordem_manutencao.feign.FuncionarioClient;
+import com.projetos.manutencao.ordem_manutencao.model.ExecucaoOrdem;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,9 +25,16 @@ import com.projetos.manutencao.ordem_manutencao.service.OrdemManutencaoService;
 public class OrdemManutencaoController {
 
     private final OrdemManutencaoService service;
+    private final FuncionarioClient funcionarioClient;
 
-    public OrdemManutencaoController(OrdemManutencaoService service) {
+    public OrdemManutencaoController(OrdemManutencaoService service, FuncionarioClient funcionarioClient) {
         this.service = service;
+        this.funcionarioClient = funcionarioClient;
+    }
+
+    @GetMapping("/funcionarios")
+    public List<FuncionarioDTO> buscarFuncionarios() {
+        return funcionarioClient.listar();
     }
 
     @PostMapping

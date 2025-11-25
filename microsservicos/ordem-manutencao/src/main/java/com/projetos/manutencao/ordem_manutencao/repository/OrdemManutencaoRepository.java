@@ -6,4 +6,7 @@ import org.springframework.stereotype.Repository;
 import com.projetos.manutencao.ordem_manutencao.model.OrdemManutencao;
 
 @Repository
-public interface OrdemManutencaoRepository extends MongoRepository<OrdemManutencao, String> {}
+public interface OrdemManutencaoRepository extends MongoRepository<OrdemManutencao, String> {
+    long countByResponsavelID(String responsavelID);
+
+}

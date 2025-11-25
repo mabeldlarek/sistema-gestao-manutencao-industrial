@@ -6,11 +6,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.projetos.manutencao.ordem_manutencao.DTO.ExecucaoOrdemDTO;
-import com.projetos.manutencao.ordem_manutencao.DTO.ExecucaoOrdemPausarDTO;
-import com.projetos.manutencao.ordem_manutencao.DTO.PeriodoTrabalhoDTO;
+import com.projetos.manutencao.ordem_manutencao.DTO.*;
 import com.projetos.manutencao.ordem_manutencao.enums.StatusExecucao;
+import com.projetos.manutencao.ordem_manutencao.feign.ProcedimentoClient;
+import com.projetos.manutencao.ordem_manutencao.model.ChecklistItem;
+import com.projetos.manutencao.ordem_manutencao.model.OrdemManutencao;
 import com.projetos.manutencao.ordem_manutencao.model.PeriodoTrabalho;
+import com.projetos.manutencao.ordem_manutencao.repository.OrdemManutencaoRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,17 +25,24 @@ import com.projetos.manutencao.ordem_manutencao.service.ExecucaoOrdemService;
 public class ExecucaoOrdemServiceImpl implements ExecucaoOrdemService {
 
     private final ExecucaoOrdemRepository repository;
+    private final OrdemManutencaoRepository repositoryOM;
+    private final ProcedimentoClient procedimentoClient;
+
     @Autowired
     private ModelMapper modelMapper;
 
-     public ExecucaoOrdemServiceImpl(ExecucaoOrdemRepository repository) {
+     public ExecucaoOrdemServiceImpl(ExecucaoOrdemRepository repository, OrdemManutencaoRepository repositoryOM, ProcedimentoClient procedimentoClient) {
         this.repository = repository;
-    }
+         this.repositoryOM = repositoryOM;
+         this.procedimentoClient = procedimentoClient;
+     }
 
     @Override
     public ExecucaoOrdem criarExecucao(ExecucaoOrdemDTO execucaoOrdemDTO) {
          //Execucao comeca com INICIADA (periodo de trabalho com inicio) lista n vazia
         //Data de inicio setada
+        // Checklist gerado
+
         ExecucaoOrdem execucao = modelMapper.map(execucaoOrdemDTO, ExecucaoOrdem.class);
         execucao.setId(UUID.randomUUID().toString());
         execucao.setDataInicio(LocalDateTime.now());
@@ -43,6 +52,10 @@ public class ExecucaoOrdemServiceImpl implements ExecucaoOrdemService {
         periodoTrabalhoList.add(new PeriodoTrabalho(LocalDateTime.now(), null));
 
         execucao.setPeriodosDeTrabalho(periodoTrabalhoList);
+
+        List<ChecklistItem> checklistItemList = gerarCheckList(execucao.getOrdemManutencaoID());
+
+        execucao.setChecklistItens(checklistItemList);
 
         return repository.save(execucao);
     }
@@ -137,6 +150,25 @@ public class ExecucaoOrdemServiceImpl implements ExecucaoOrdemService {
             repository.save(execucao);
         }
 
+    }
+
+    private List<ChecklistItem> gerarCheckList(String idOM){
+        //execucao possui a ordem
+        // a ordem possui o procedimento com as strings do passo a passo
+        //montar o objeto checklist descricao = string
+        // todos os concluidos com false
+
+        OrdemManutencao om = repositoryOM.findById(idOM).get();
+        String idProcedimento = om.getProcedimentoID();
+
+        ProcedimentoCheklistDTO listaPassos = procedimentoClient.buscar(idProcedimento);
+        List<ChecklistItem> checklistItemList = new ArrayList<>();
+
+        for(String passo : listaPassos.getPassosChecklist()){
+            checklistItemList.add(new ChecklistItem(passo, false));
+        }
+
+        return checklistItemList;
     }
 
 }

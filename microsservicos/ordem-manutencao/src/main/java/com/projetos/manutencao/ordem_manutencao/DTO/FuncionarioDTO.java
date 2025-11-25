@@ -8,6 +8,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FuncionarioDTO {
+
    private String nome;
+   private String matricula;
+   private String cargo;
    private String id;
+
 }
