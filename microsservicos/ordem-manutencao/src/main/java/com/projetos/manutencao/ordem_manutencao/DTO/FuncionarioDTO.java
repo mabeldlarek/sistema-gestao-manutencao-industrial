@@ -1,4 +1,4 @@
-package com.projetos.manutencao.ordem_manutencao.feign;
+package com.projetos.manutencao.ordem_manutencao.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

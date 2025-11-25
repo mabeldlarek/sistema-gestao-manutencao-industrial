@@ -47,6 +47,18 @@ public class ExecucaoOrdemController {
         return ResponseEntity.ok(service.atualizarExecucao(id, execucaoOrdemDTO));
     }
 
+    @PutMapping("/{id}/pausar")
+    public ResponseEntity<ExecucaoOrdem> pausarTrabalho(@PathVariable String id) {
+        service.pausarExecucao(id);
+       return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}/iniciar")
+    public ResponseEntity<ExecucaoOrdem> iniciarTrabalho(@PathVariable String id) {
+        service.iniciarExecucao(id);
+        return ResponseEntity.noContent().build();
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable String id) {
         service.deletarExecucao(id);

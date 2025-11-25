@@ -22,8 +22,8 @@ public class ExecucaoOrdem {
     private String id;
     private String ordemManutencaoID;
     private String executorID;
-    private Date dataInicio;
-    private Date dataFim;
+    private LocalDateTime dataInicio;
+    private LocalDateTime dataFim;
     private List<PeriodoTrabalho> periodosDeTrabalho;
     private String descricaoTrabalhoExecutado;
     private String observacoesExecutor;

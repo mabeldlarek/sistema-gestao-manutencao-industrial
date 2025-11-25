@@ -1,12 +1,10 @@
 package com.projetos.manutencao.ordem_manutencao.controller;
 
 import java.util.List;
-import java.util.UUID;
 
 import com.projetos.manutencao.ordem_manutencao.DTO.MedidorDTO;
 import com.projetos.manutencao.ordem_manutencao.DTO.PlanoManutencaoDTO;
 //import com.projetos.manutencao.ordem_manutencao.feign.FuncionarioClient;
-import com.projetos.manutencao.ordem_manutencao.feign.FuncionarioDTO;
 import com.projetos.manutencao.ordem_manutencao.feign.MedidorClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;

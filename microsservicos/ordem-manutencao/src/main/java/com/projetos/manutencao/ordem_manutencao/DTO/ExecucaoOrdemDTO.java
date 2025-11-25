@@ -28,7 +28,6 @@ public class ExecucaoOrdemDTO {
     @Size(max = 1000, message = "As observações do executor não podem exceder 1000 caracteres.")
     private String observacoesExecutor;
 
-    @NotNull(message = "O status da execução é obrigatório.")
     private StatusExecucao statusExecucao;
 
     private String assinaturaDigital;
@@ -40,8 +39,6 @@ public class ExecucaoOrdemDTO {
     private List<String> fotosAntes;
     private List<String> fotosDepois;
 
-    @NotNull(message = "A lista de períodos de trabalho é obrigatória.")
-    @Size(min = 1, message = "É necessário pelo menos um período de trabalho.")
     private List<PeriodoTrabalhoDTO> periodosDeTrabalho;
 
 

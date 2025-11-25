@@ -3,6 +3,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.projetos.manutencao.ordem_manutencao.DTO.ExecucaoOrdemDTO;
+import com.projetos.manutencao.ordem_manutencao.DTO.ExecucaoOrdemPausarDTO;
 import com.projetos.manutencao.ordem_manutencao.model.ExecucaoOrdem;
 
 public interface ExecucaoOrdemService {
@@ -11,4 +12,6 @@ public interface ExecucaoOrdemService {
     List<ExecucaoOrdem> listarTodas();
     ExecucaoOrdem atualizarExecucao(String id, ExecucaoOrdemDTO execucaoOrdemDTO);
     void deletarExecucao(String id);
+    void pausarExecucao(String id);
+    void iniciarExecucao(String id);
 }
