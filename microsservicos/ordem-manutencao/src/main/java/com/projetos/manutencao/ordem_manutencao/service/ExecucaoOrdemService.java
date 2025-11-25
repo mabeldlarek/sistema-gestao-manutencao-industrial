@@ -14,4 +14,5 @@ public interface ExecucaoOrdemService {
     void deletarExecucao(String id);
     void pausarExecucao(String id);
     void iniciarExecucao(String id);
+    void finalizarExecucao(String id);
 }

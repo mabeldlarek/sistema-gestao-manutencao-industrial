@@ -1,13 +1,12 @@
 package com.projetos.manutencao.ordem_manutencao.service.impl;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import com.projetos.manutencao.ordem_manutencao.DTO.*;
 import com.projetos.manutencao.ordem_manutencao.enums.StatusExecucao;
+import com.projetos.manutencao.ordem_manutencao.enums.StatusOrdem;
 import com.projetos.manutencao.ordem_manutencao.feign.ProcedimentoClient;
 import com.projetos.manutencao.ordem_manutencao.model.ChecklistItem;
 import com.projetos.manutencao.ordem_manutencao.model.OrdemManutencao;
@@ -15,6 +14,7 @@ import com.projetos.manutencao.ordem_manutencao.model.PeriodoTrabalho;
 import com.projetos.manutencao.ordem_manutencao.repository.OrdemManutencaoRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import com.projetos.manutencao.ordem_manutencao.model.ExecucaoOrdem;
@@ -88,28 +88,34 @@ public class ExecucaoOrdemServiceImpl implements ExecucaoOrdemService {
     @Override
     public void pausarExecucao(String id) {
         ExecucaoOrdem execucao = repository.findById(id).get();
+        verificarCondicaoPausa(execucao);
+        forListaPeriodoTrabalhoPausa(execucao);
 
-        if (execucao.getStatusExecucao().equals(StatusExecucao.FINALIZADA)) {
-            throw new RuntimeException("Execução já foi finalizada");
-        }
+     }
 
-        if(execucao.getStatusExecucao().equals(StatusExecucao.PAUSADA)){
-            throw new RuntimeException("Execução ja foi pausada");
-        }
+     private void forListaPeriodoTrabalhoPausa(ExecucaoOrdem execucao){
+         List<PeriodoTrabalho> periodoTrabalhoList = execucao.getPeriodosDeTrabalho();
 
-        List<PeriodoTrabalho> periodoTrabalhoList = execucao.getPeriodosDeTrabalho();
+         for(PeriodoTrabalho pT : periodoTrabalhoList){
+             if(pT.getInicio() != null && pT.getFim() == null){
+                 pT.setFim(LocalDateTime.now());
+                 execucao.setStatusExecucao(StatusExecucao.PAUSADA);
+                 execucao.setId(execucao.getId());
+                 execucao.setPeriodosDeTrabalho(periodoTrabalhoList);
+                 repository.save(execucao);
+                 return;
+             }
+         }
+     }
 
-        for(PeriodoTrabalho pT : periodoTrabalhoList){
-            if(pT.getInicio() != null && pT.getFim() == null){
-                pT.setFim(LocalDateTime.now());
-            }
-        }
+     private void verificarCondicaoPausa(ExecucaoOrdem execucao){
+         if (execucao.getStatusExecucao().equals(StatusExecucao.FINALIZADA)) {
+             throw new RuntimeException("Execução já foi finalizada");
+         }
 
-        execucao.setStatusExecucao(StatusExecucao.PAUSADA);
-        execucao.setId(id);
-        execucao.setPeriodosDeTrabalho(periodoTrabalhoList);
-
-        repository.save(execucao);
+         if(execucao.getStatusExecucao().equals(StatusExecucao.PAUSADA)){
+             throw new RuntimeException("Execução ja foi pausada");
+         }
      }
 
     @Override
@@ -150,6 +156,21 @@ public class ExecucaoOrdemServiceImpl implements ExecucaoOrdemService {
             repository.save(execucao);
         }
 
+    }
+
+    @Override
+    public void finalizarExecucao(String id) {
+        ExecucaoOrdem execucao = repository.findById(id).get();
+
+        forListaPeriodoTrabalhoPausa(execucao);
+        execucao.setStatusExecucao(StatusExecucao.FINALIZADA);
+
+        OrdemManutencao om = repositoryOM.findById(execucao.getOrdemManutencaoID()).get();
+        om.setDataFechamento(Date.from(Instant.now()));
+        om.setStatus(StatusOrdem.CONCLUIDA);
+
+        repository.save(execucao);
+        repositoryOM.save(om);
     }
 
     private List<ChecklistItem> gerarCheckList(String idOM){

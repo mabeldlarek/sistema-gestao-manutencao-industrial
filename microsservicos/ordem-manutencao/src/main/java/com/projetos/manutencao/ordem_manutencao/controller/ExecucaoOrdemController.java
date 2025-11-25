@@ -66,4 +66,10 @@ public class ExecucaoOrdemController {
         service.deletarExecucao(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/{id}/finalizar")
+    public ResponseEntity<ExecucaoOrdem> finalizarTrabalho(@PathVariable String id) {
+        service.finalizarExecucao(id);
+        return ResponseEntity.noContent().build();
+    }
 }
