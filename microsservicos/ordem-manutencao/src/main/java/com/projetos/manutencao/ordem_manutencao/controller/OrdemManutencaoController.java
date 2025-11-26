@@ -3,15 +3,14 @@ package com.projetos.manutencao.ordem_manutencao.controller;
 import java.util.List;
 import java.util.Optional;
 
+import com.projetos.manutencao.ordem_manutencao.DTO.FuncionarioDTO;
+import com.projetos.manutencao.ordem_manutencao.DTO.OrdemManutencaoDTO;
+import com.projetos.manutencao.ordem_manutencao.DTO.UpdateStatusOrdemDTO;
+import com.projetos.manutencao.ordem_manutencao.enums.StatusOrdem;
+import com.projetos.manutencao.ordem_manutencao.feign.FuncionarioClient;
+import com.projetos.manutencao.ordem_manutencao.model.ExecucaoOrdem;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.projetos.manutencao.ordem_manutencao.model.OrdemManutencao;
 import com.projetos.manutencao.ordem_manutencao.service.OrdemManutencaoService;
@@ -21,13 +20,20 @@ import com.projetos.manutencao.ordem_manutencao.service.OrdemManutencaoService;
 public class OrdemManutencaoController {
 
     private final OrdemManutencaoService service;
+    private final FuncionarioClient funcionarioClient;
 
-    public OrdemManutencaoController(OrdemManutencaoService service) {
+    public OrdemManutencaoController(OrdemManutencaoService service, FuncionarioClient funcionarioClient) {
         this.service = service;
+        this.funcionarioClient = funcionarioClient;
+    }
+
+    @GetMapping("/funcionarios")
+    public List<FuncionarioDTO> buscarFuncionarios() {
+        return funcionarioClient.listar();
     }
 
     @PostMapping
-    public ResponseEntity<OrdemManutencao> create(@RequestBody OrdemManutencao ordem) {
+    public ResponseEntity<OrdemManutencao> create(@RequestBody OrdemManutencaoDTO ordem) {
         OrdemManutencao created = service.create(ordem);
         return ResponseEntity.ok(created);
     }
@@ -44,9 +50,15 @@ public class OrdemManutencaoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<OrdemManutencao> update(@PathVariable String id, @RequestBody OrdemManutencao ordem) {
+    public ResponseEntity<OrdemManutencao> update(@PathVariable String id, @RequestBody OrdemManutencaoDTO ordem) {
         OrdemManutencao updated = service.update(id, ordem);
         return ResponseEntity.ok(updated);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Void> updateStatus(@PathVariable String id, @RequestBody UpdateStatusOrdemDTO statusOrdemDTO) {
+        service.updateStatus(id, statusOrdemDTO);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")

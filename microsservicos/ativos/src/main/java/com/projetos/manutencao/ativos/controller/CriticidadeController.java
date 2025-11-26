@@ -2,6 +2,7 @@ package com.projetos.manutencao.ativos.controller;
 import java.util.List;
 
 import com.projetos.manutencao.ativos.DTO.CriticidadeDTO;
+import com.projetos.manutencao.ativos.model.Equipamento;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +24,11 @@ public class CriticidadeController {
 
     public CriticidadeController(CriticidadeService service) {
         this.service = service;
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Criticidade>> listAll() {
+        return ResponseEntity.ok(service.findAll());
     }
 
     @PostMapping("equipamentos/{id}/calcular")

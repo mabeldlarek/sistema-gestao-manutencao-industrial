@@ -2,6 +2,9 @@ package com.projetos.manutencao.ordem_manutencao.controller;
 
 import java.util.List;
 
+import com.projetos.manutencao.ordem_manutencao.DTO.ExecucaoOrdemDTO;
+import com.projetos.manutencao.ordem_manutencao.DTO.ProcedimentoCheklistDTO;
+import com.projetos.manutencao.ordem_manutencao.feign.ProcedimentoClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,8 +28,8 @@ public class ExecucaoOrdemController {
     private final ExecucaoOrdemService service;
 
     @PostMapping
-    public ResponseEntity<ExecucaoOrdem> criar(@RequestBody ExecucaoOrdem execucao) {
-        return ResponseEntity.ok(service.criarExecucao(execucao));
+    public ResponseEntity<ExecucaoOrdem> criar(@RequestBody ExecucaoOrdemDTO execucaoOrdemDTO) {
+        return ResponseEntity.ok(service.criarExecucao(execucaoOrdemDTO));
     }
 
     @GetMapping("/{id}")
@@ -42,13 +45,31 @@ public class ExecucaoOrdemController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ExecucaoOrdem> atualizar(@PathVariable String id, @RequestBody ExecucaoOrdem execucao) {
-        return ResponseEntity.ok(service.atualizarExecucao(id, execucao));
+    public ResponseEntity<ExecucaoOrdem> atualizar(@PathVariable String id, @RequestBody ExecucaoOrdemDTO execucaoOrdemDTO) {
+        return ResponseEntity.ok(service.atualizarExecucao(id, execucaoOrdemDTO));
+    }
+
+    @PutMapping("/{id}/pausar")
+    public ResponseEntity<ExecucaoOrdem> pausarTrabalho(@PathVariable String id) {
+        service.pausarExecucao(id);
+       return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}/iniciar")
+    public ResponseEntity<ExecucaoOrdem> iniciarTrabalho(@PathVariable String id) {
+        service.iniciarExecucao(id);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable String id) {
         service.deletarExecucao(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}/finalizar")
+    public ResponseEntity<ExecucaoOrdem> finalizarTrabalho(@PathVariable String id) {
+        service.finalizarExecucao(id);
         return ResponseEntity.noContent().build();
     }
 }

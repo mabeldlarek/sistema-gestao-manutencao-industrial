@@ -14,6 +14,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class MedidorDTO {
 
+    @NotBlank(message = "O código é obrigatório.")
+    private String codigo;
+
     @NotBlank(message = "O nome do medidor é obrigatório.")
     private String nome;
 
