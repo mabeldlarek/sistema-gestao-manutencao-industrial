@@ -5,17 +5,12 @@ import java.util.Optional;
 
 import com.projetos.manutencao.ordem_manutencao.DTO.FuncionarioDTO;
 import com.projetos.manutencao.ordem_manutencao.DTO.OrdemManutencaoDTO;
+import com.projetos.manutencao.ordem_manutencao.DTO.UpdateStatusOrdemDTO;
+import com.projetos.manutencao.ordem_manutencao.enums.StatusOrdem;
 import com.projetos.manutencao.ordem_manutencao.feign.FuncionarioClient;
 import com.projetos.manutencao.ordem_manutencao.model.ExecucaoOrdem;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.projetos.manutencao.ordem_manutencao.model.OrdemManutencao;
 import com.projetos.manutencao.ordem_manutencao.service.OrdemManutencaoService;
@@ -58,6 +53,12 @@ public class OrdemManutencaoController {
     public ResponseEntity<OrdemManutencao> update(@PathVariable String id, @RequestBody OrdemManutencaoDTO ordem) {
         OrdemManutencao updated = service.update(id, ordem);
         return ResponseEntity.ok(updated);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Void> updateStatus(@PathVariable String id, @RequestBody UpdateStatusOrdemDTO statusOrdemDTO) {
+        service.updateStatus(id, statusOrdemDTO);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")

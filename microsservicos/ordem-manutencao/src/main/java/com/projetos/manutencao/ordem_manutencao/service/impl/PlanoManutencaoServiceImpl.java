@@ -6,7 +6,12 @@ import java.util.Optional;
 import java.util.UUID;
 
 import com.projetos.manutencao.ordem_manutencao.DTO.PlanoManutencaoDTO;
+import com.projetos.manutencao.ordem_manutencao.DTO.UpdateStatusOrdemDTO;
+import com.projetos.manutencao.ordem_manutencao.DTO.UpdateStatusPlanoDTO;
+import com.projetos.manutencao.ordem_manutencao.enums.StatusOrdem;
+import com.projetos.manutencao.ordem_manutencao.enums.StatusPlano;
 import com.projetos.manutencao.ordem_manutencao.enums.UnidadeFrequencia;
+import com.projetos.manutencao.ordem_manutencao.model.OrdemManutencao;
 import com.projetos.manutencao.ordem_manutencao.model.PlanoManutencao;
 import com.projetos.manutencao.ordem_manutencao.util.DateTimeUtils;
 import org.modelmapper.ModelMapper;
@@ -79,17 +84,15 @@ public class PlanoManutencaoServiceImpl implements PlanoManutencaoService {
         );
     }
 
-    private void getProfissionais(){
+    @Override
+    public void updateStatus(String idOm, UpdateStatusPlanoDTO status) {
+        PlanoManutencao om = repository.findById(idOm).get();
+        StatusPlano statusPlano = modelMapper.map(status, StatusPlano.class);
 
-    }
-
-
-    private void verificarPlanoGeracaoAutomatica(List <PlanoManutencaoDTO> listPlanosManutencao){
-
-    }
-
-    private void verificarPlanoGeracaoAutomaticaPorMedidor(List <PlanoManutencaoDTO> listPlanosManutencao){
-
+        if (om != null) {
+            om.setStatus(statusPlano);
+            repository.save(om);
+        }
     }
 
 }

@@ -2,6 +2,7 @@ package com.projetos.manutencao.ativos.controller;
 
 
 import java.util.List;
+import java.util.Map;
 
 import com.projetos.manutencao.ativos.DTO.EquipamentoDTO;
 import org.springframework.http.ResponseEntity;
@@ -59,5 +60,10 @@ public class EquipamentoController {
     public ResponseEntity<Void> delete(@PathVariable String id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/criticidade/{idEquipamento}")
+    public ResponseEntity<String> getNivelCriticidadeEquipamento(@PathVariable String idEquipamento) {
+        return ResponseEntity.ok(service.findNivelCriticidadeEquipamento(idEquipamento));
     }
 }

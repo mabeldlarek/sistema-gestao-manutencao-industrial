@@ -42,6 +42,7 @@ public class ExecucaoOrdemServiceImpl implements ExecucaoOrdemService {
          //Execucao comeca com INICIADA (periodo de trabalho com inicio) lista n vazia
         //Data de inicio setada
         // Checklist gerado
+        // Execucao iniciada muda a OM para EM_Execucao
 
         ExecucaoOrdem execucao = modelMapper.map(execucaoOrdemDTO, ExecucaoOrdem.class);
         execucao.setId(UUID.randomUUID().toString());
@@ -56,6 +57,10 @@ public class ExecucaoOrdemServiceImpl implements ExecucaoOrdemService {
         List<ChecklistItem> checklistItemList = gerarCheckList(execucao.getOrdemManutencaoID());
 
         execucao.setChecklistItens(checklistItemList);
+
+        OrdemManutencao om = repositoryOM.findById(execucao.getOrdemManutencaoID()).get();
+        om.setStatus(StatusOrdem.EM_EXECUCAO);
+
 
         return repository.save(execucao);
     }
@@ -191,5 +196,7 @@ public class ExecucaoOrdemServiceImpl implements ExecucaoOrdemService {
 
         return checklistItemList;
     }
+
+
 
 }
