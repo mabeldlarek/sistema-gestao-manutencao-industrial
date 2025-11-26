@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.util.List;
 import java.util.UUID;
 
-@FeignClient(name = "peca-service", url = "${services.pecas.url}")
+@FeignClient(name = "material-estoque-service", url = "${services.material-estoque.url}")
 public interface PecaClient {
 
     @GetMapping("/{id}")

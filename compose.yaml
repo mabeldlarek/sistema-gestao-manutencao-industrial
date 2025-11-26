@@ -1,8 +1,0 @@
-services:
-  sistemagestaomanutencaoindustrial:
-    image: sistemagestaomanutencaoindustrial
-    build:
-      context: .
-      dockerfile: ./Dockerfile
-    ports:
-      - 5005:5005
