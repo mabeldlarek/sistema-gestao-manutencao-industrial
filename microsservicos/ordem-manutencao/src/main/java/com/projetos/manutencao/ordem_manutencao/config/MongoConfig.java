@@ -1,4 +1,4 @@
-package com.projetos.manutencao.ativos.config;
+package com.projetos.manutencao.ordem_manutencao.config;
 
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
@@ -12,12 +12,16 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 @Configuration
 public class MongoConfig {
 
-    @Value("${spring.data.mongodb.uri}")
+    @Value("${SPRING_DATA_MONGODB_URI}")
     private String mongoUri;
 
     @Bean
     public MongoClient mongoClient() {
-        return MongoClients.create(mongoUri);
+        ConnectionString connectionString = new ConnectionString(mongoUri);
+        MongoClientSettings mongoClientSettings = MongoClientSettings.builder()
+                .applyConnectionString(connectionString)
+                .build();
+        return MongoClients.create(mongoClientSettings);
     }
 
     @Bean

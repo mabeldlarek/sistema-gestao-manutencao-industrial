@@ -29,9 +29,4 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
-    public JwtDecoder jwtDecoder() {
-        String jwkSetUri = "http://identidade-acesso:8080/.well-known/jwks.json";
-        return NimbusJwtDecoder.withJwkSetUri(jwkSetUri).build();
-    }
 }

@@ -52,7 +52,6 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()
                         .requestMatchers(HttpMethod.POST, "/login").permitAll()
                         .requestMatchers(
                                 "/.well-known/jwks.json",
