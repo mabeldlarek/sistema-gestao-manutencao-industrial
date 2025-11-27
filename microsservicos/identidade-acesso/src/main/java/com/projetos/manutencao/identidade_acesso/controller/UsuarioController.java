@@ -35,36 +35,41 @@ public class UsuarioController {
     }
 
     @GetMapping("usuarios")
-    @PreAuthorize("hasAuthority('SCOPE_admin')")
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public ResponseEntity<Object> getListaUsuarios(HttpServletRequest request) {
         return new ResponseEntity<>(usuarioService.findAll(), HttpStatus.OK);
 
     }
 
     @GetMapping("usuarios/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public ResponseEntity<Object> getUsuarioId(HttpServletRequest request, @PathVariable String id) {
         return new ResponseEntity<>(usuarioService.findById(UUID.fromString(id)), HttpStatus.OK);
     }
 
     @PostMapping("usuarios")
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public ResponseEntity<Object> createUsuario(HttpServletRequest request, @Valid @RequestBody UsuarioDTO usuario) {
         usuarioService.save(usuario);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping("usuarios/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public ResponseEntity<Object> updateUsuario(HttpServletRequest request, @Valid @RequestBody UsuarioDTO usuario) {
         usuarioService.update(usuario);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("usuarios/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public ResponseEntity<Object> deleteUsuario(HttpServletRequest request, @PathVariable String id) {
         usuarioService.deleteById(UUID.fromString(id));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/usuarios/funcionarios/{matricula}")
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public ResponseEntity<Void> criarUsuarioParaFuncionario(
             @PathVariable String matricula,
             @Valid @RequestBody UsuarioDTO usuarioDTO

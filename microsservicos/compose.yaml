@@ -1,9 +1,25 @@
 services:
-  identidade-acesso:
-    build: ./identidade-acesso
-    container_name: ct-identidade-acesso
+  mongo:
+    image: mongo:6
+    container_name: ct-mongo
+    environment:
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
     ports:
-      - "${APP_PORT_IDENTIDADE}:8080"
+      - "27017:27017"
+    volumes:
+      - mongodata:/data/db
+    networks:
+      - microsservicos-dev
+
+  identidade-acesso:
+    build:
+      context: ./identidade-acesso
+      dockerfile: Dockerfile
+    container_name: ct-identidade-a1cesso
+    ports:
+      - "${APP_PORT_IDENTIDADE}:8081"
       - "5005:5005"
     env_file:
       - ./identidade-acesso/.env
@@ -16,10 +32,12 @@ services:
       - microsservicos-dev
 
   material-estoque:
-    build: ./material-estoque
+    build:
+      context: ./material-estoque
+      dockerfile: Dockerfile
     container_name: ct-material-estoque
     ports:
-      - "${APP_PORT_MATERIAL}:8080"
+      - "${APP_PORT_MATERIAL}:8082"
       - "5006:5005"
     env_file:
       - ./material-estoque/.env
@@ -28,14 +46,17 @@ services:
       SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: 'http://identidade-acesso:8081/.well-known/jwks.json'
     depends_on:
       - db
+      - mongo
     networks:
       - microsservicos-dev
 
   conteudo:
-    build: ./conteudo
+    build:
+      context: ./conteudo
+      dockerfile: Dockerfile
     container_name: ct-conteudo
     ports:
-      - "${APP_PORT_CONTEUDO}:8080"
+      - "${APP_PORT_CONTEUDO}:8086"
       - "5007:5005"
     env_file:
       - ./conteudo/.env
@@ -48,10 +69,12 @@ services:
       - microsservicos-dev
 
   ativos:
-    build: ./ativos
+    build:
+      context: ./ativos
+      dockerfile: Dockerfile
     container_name: ct-ativos
     ports:
-      - "${APP_PORT_ATIVOS}:8080"
+      - "${APP_PORT_ATIVOS}:8090"
       - "5008:5005"
     env_file:
       - ./ativos/.env
@@ -64,17 +87,18 @@ services:
       - microsservicos-dev
 
   ordem-manutencao:
-    build: ./ordem-manutencao
+    build:
+      context: ./ordem-manutencao
+      dockerfile: Dockerfile
     container_name: ct-ordem-manutencao
     ports:
-      - "${APP_PORT_OM}:8080"
+      - "${APP_PORT_OM}:8091"
       - "5009:5005"
     env_file:
       - ./ordem-manutencao/.env
     environment:
       JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
       SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: 'http://identidade-acesso:8081/.well-known/jwks.json'
-
     depends_on:
       - mongo
     networks:
@@ -91,20 +115,6 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
-    networks:
-      - microsservicos-dev
-
-  mongo:
-    image: mongo:6
-    container_name: ct-mongo
-    environment:
-      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongodata:/data/db
     networks:
       - microsservicos-dev
 

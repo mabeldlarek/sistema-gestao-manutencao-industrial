@@ -8,6 +8,7 @@ import com.projetos.manutencao.identidade_acesso.service.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,6 +38,7 @@ public class FuncionarioController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public ResponseEntity<Funcionario> getById(@PathVariable String id) {
         return service.findById(id)
                 .map(ResponseEntity::ok)
@@ -44,12 +46,14 @@ public class FuncionarioController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public ResponseEntity<Funcionario> create(@Valid @RequestBody FuncionarioDTO funcionario) {
         Funcionario saved = service.save(funcionario);
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable String id) {
         usuarioFuncionarioService.deleteByIdUsuarioVinculado(id);
 
@@ -57,6 +61,7 @@ public class FuncionarioController {
     }
 
     @PutMapping
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public ResponseEntity<Void> put(@Valid @RequestBody FuncionarioDTO funcionario) {
         service.update(funcionario);
         return ResponseEntity.ok().build();
