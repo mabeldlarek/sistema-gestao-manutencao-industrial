@@ -3,6 +3,7 @@ package com.projetos.manutencao.ativos.service.impl;
 
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 import com.projetos.manutencao.ativos.DTO.CriticidadeDTO;
@@ -25,6 +26,7 @@ public class EquipamentoServiceImpl implements EquipamentoService {
 
     private final EquipamentoRepository repository;
     private final CriticidadeRepository criticidadeRepository;
+
     @Autowired
     private ModelMapper modelMapper;
 
@@ -35,6 +37,11 @@ public class EquipamentoServiceImpl implements EquipamentoService {
 
     @Override
     public Equipamento create(EquipamentoDTO equipamentoDTO) {
+
+        if (equipamentoDTO == null) {
+            throw new IllegalArgumentException("Objeto EquipamentoDTO não pode ser nulo.");
+        }
+
         Equipamento equipamento = modelMapper.map(equipamentoDTO, Equipamento.class);
 
         if (equipamento.getId() == null || equipamento.getId().isBlank()) {
@@ -53,7 +60,12 @@ public class EquipamentoServiceImpl implements EquipamentoService {
 
     @Override
     public Equipamento findById(String id) {
-        return repository.findById(id).orElse(null);
+        if (id == null || id.isBlank()) {
+            throw new IllegalArgumentException("ID não pode ser vazio.");
+        }
+
+        return repository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Equipamento não encontrado: " + id));
     }
 
     @Override
@@ -70,12 +82,30 @@ public class EquipamentoServiceImpl implements EquipamentoService {
 
     @Override
     public void delete(String id) {
+        if (id == null || id.isBlank()) {
+            throw new IllegalArgumentException("ID não pode ser vazio.");
+        }
+
+        if (!repository.existsById(id)) {
+            throw new NoSuchElementException("Equipamento não encontrado para exclusão: " + id);
+        }
+
         repository.deleteById(id);
     }
 
     @Override
     public List<Equipamento> getTreeEquipamentos(String codigo) {
-        return repository.findByPathStartingWithOrderByPathAsc(codigo);
+        if (codigo == null || codigo.isBlank()) {
+            throw new IllegalArgumentException("Código não pode ser vazio.");
+        }
+
+        List<Equipamento> resultado = repository.findByPathStartingWithOrderByPathAsc(codigo);
+
+        if (resultado == null || resultado.isEmpty()) {
+            throw new NoSuchElementException("Nenhum equipamento encontrado iniciando com: " + codigo);
+        }
+
+        return resultado;
     }
 
     @Override
@@ -85,13 +115,17 @@ public class EquipamentoServiceImpl implements EquipamentoService {
 
         return criticidadeRepository.findById(equipamento.getCriticidadeID())
                 .map(Criticidade::getNivel)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        "Criticidade não encontrada: " + equipamento.getCriticidadeID()
-                ));
+                .orElseThrow(() ->
+                        new NoSuchElementException(
+                                "Criticidade não encontrada: " + equipamento.getCriticidadeID()
+                        ));
     }
 
     private void setPath(Equipamento equipamento){
+        if (equipamento == null) {
+            throw new IllegalArgumentException("Objeto Equipamento não pode ser nulo.");
+        }
+
         String path = "";
 
         if(equipamento.getParentID() != null){
