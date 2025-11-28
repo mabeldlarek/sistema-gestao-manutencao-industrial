@@ -6,6 +6,7 @@ import com.projetos.manutencao.ativos.service.MedidorService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -21,8 +22,8 @@ public class MedidorController {
     @PostMapping("/equipamento/{equipamentoId}")
     public ResponseEntity<Medidor> create(@PathVariable String equipamentoId, @RequestBody MedidorDTO medidorDTO) {
         Medidor criado = service.create(equipamentoId, medidorDTO);
-
-        return ResponseEntity.status(201).body(criado);
+        URI uri = URI.create("/medidor/" + criado.getId());
+        return ResponseEntity.created(uri).body(criado);
     }
 
     @GetMapping("/equipamento/{equipamentoId}")
@@ -31,10 +32,9 @@ public class MedidorController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Medidor> findById(@PathVariable String id) {
-        return service.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public Medidor findById(@PathVariable String id) {
+        Medidor medidor = service.findById(id);
+        return ResponseEntity.ok(medidor).getBody();
     }
 
     @DeleteMapping("/{id}")

@@ -4,6 +4,7 @@ import com.projetos.manutencao.ativos.enums.TipoMedidor;
 import com.projetos.manutencao.ativos.enums.UnidadeMedida;
 import lombok.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 
@@ -14,6 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Medidor {
 
     @Id
+    @Indexed(unique = true)
     private String id;
 
     private String equipamentoId;

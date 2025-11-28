@@ -1,5 +1,8 @@
 package com.projetos.manutencao.ativos.exception;
 
+import com.mongodb.DuplicateKeyException;
+import com.mongodb.MongoException;
+import com.mongodb.MongoWriteException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -114,6 +117,48 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 "Erro interno no servidor: " + ex.getMessage(),
+                null,
+                request.getRequestURI()
+        );
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+    }
+
+    @ExceptionHandler({DuplicateKeyException.class})
+    public ResponseEntity<ErrorResponse> handleDuplicateKeyException(
+            DuplicateKeyException ex, HttpServletRequest request) {
+
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.CONFLICT,
+                "Valor duplicado no banco de dados.",
+                null,
+                request.getRequestURI()
+        );
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+    }
+
+    @ExceptionHandler(MongoWriteException.class)
+    public ResponseEntity<ErrorResponse> handleMongoWriteException(
+            MongoWriteException ex, HttpServletRequest request) {
+
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.BAD_REQUEST,
+                "Erro ao gravar no MongoDB: " + ex.getMessage(),
+                null,
+                request.getRequestURI()
+        );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
+    @ExceptionHandler(MongoException.class)
+    public ResponseEntity<ErrorResponse> handleMongoException(
+            MongoException ex, HttpServletRequest request) {
+
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "Erro interno ao acessar o MongoDB.",
                 null,
                 request.getRequestURI()
         );
