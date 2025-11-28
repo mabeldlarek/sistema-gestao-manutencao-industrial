@@ -1,10 +1,7 @@
 package com.projetos.manutencao.ativos.service.impl;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import com.projetos.manutencao.ativos.DTO.CriticidadeDTO;
 import com.projetos.manutencao.ativos.enums.Frequencia;
@@ -29,6 +26,7 @@ public class CriticidadeServiceImpl implements CriticidadeService {
     private final CriticidadeRepository repository;
     private final EquipamentoRepository equipamentoRepository;
     private final HashMap<String, Double> produtoCalculadoPorCategoria = new HashMap<String, Double>();
+
     @Autowired
     private ModelMapper modelMapper;
 
@@ -39,15 +37,24 @@ public class CriticidadeServiceImpl implements CriticidadeService {
 
     @Override
     public Criticidade create(String idEquipamento, CriticidadeDTO criticidadeDTO) {
+
+        if (idEquipamento == null || idEquipamento.isBlank()) {
+            throw new IllegalArgumentException("ID do equipamento não pode ser vazio.");
+        }
+
+        if (criticidadeDTO == null) {
+            throw new IllegalArgumentException("Objeto CriticidadeDTO não pode ser nulo.");
+        }
+
         Criticidade criticidade = modelMapper.map(criticidadeDTO, Criticidade.class);
 
         if (criticidade.getId() == null || criticidade.getId().isBlank()) {
             criticidade.setId(UUID.randomUUID().toString());
-            criticidade.setNivel(obterNivelCriticidade(criticidade.getId(), criticidadeDTO));
+            criticidade.setNivel(obterNivelCriticidade(criticidadeDTO));
         }
 
         Equipamento equipamento = equipamentoRepository.findById(idEquipamento)
-                .orElseThrow(() -> new RuntimeException("Equipamento não encontrado"));
+                .orElseThrow(() -> new NoSuchElementException("Equipamento não encontrado: " + idEquipamento));
 
         equipamento.setCriticidadeID(criticidade.getId());
         equipamentoRepository.save(equipamento);
@@ -62,65 +69,154 @@ public class CriticidadeServiceImpl implements CriticidadeService {
 
     @Override
     public Criticidade findById(String id) {
-        return repository.findById(id).orElse(null);
+        if (id == null || id.isBlank()) {
+            throw new IllegalArgumentException("ID não pode ser vazio.");
+        }
+
+        return repository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Criticidade não encontrada: " + id));
     }
 
     @Override
     public Criticidade update(String id, CriticidadeDTO criticidadeDTO) {
+
+        if (id == null || id.isBlank()) {
+            throw new IllegalArgumentException("ID não pode ser vazio.");
+        }
+
+        if (criticidadeDTO == null) {
+            throw new IllegalArgumentException("Objeto CriticidadeDTO não pode ser nulo.");
+        }
+
+        if (!repository.existsById(id)) {
+            throw new NoSuchElementException("Criticidade não encontrada para atualização: " + id);
+        }
+
         Criticidade criticidade = modelMapper.map(criticidadeDTO, Criticidade.class);
-
-        if (!repository.existsById(id)) return null;
-
         criticidade.setId(id);
 
         return repository.save(criticidade);
     }
 
-    public String obterNivelCriticidade(String id, CriticidadeDTO criticidadeDTO) {
+    @Override
+    public void delete(String id) {
+        if (id == null || id.isBlank()) {
+            throw new IllegalArgumentException("ID não pode ser vazio.");
+        }
+
+        if (!repository.existsById(id)) {
+            throw new NoSuchElementException("Criticidade não encontrada para exclusão: " + id);
+        }
+
+        repository.deleteById(id);
+    }
+
+    public String obterNivelCriticidade(CriticidadeDTO criticidadeDTO) {
+
+        if (criticidadeDTO == null) {
+            throw new IllegalArgumentException("CriticidadeDTO é obrigatório para cálculo.");
+        }
+
+        produtoCalculadoPorCategoria.clear();
+
         iniciarCalculoDeNivel(criticidadeDTO);
+
         double pontuacaoFinal = finalizarCalculoDeNivel();
-        String nivelFinal = definirNivelFinal(pontuacaoFinal);
-        return nivelFinal;
+
+        return definirNivelFinal(pontuacaoFinal);
     }
 
     public void iniciarCalculoDeNivel(CriticidadeDTO criticidadeDTO) {
-        calcularNivelProdutoCriticidadePorCategoria(Peso.PRODUCAO.getCategoria(), criticidadeDTO.getFrequenciaImpactoProducao(), criticidadeDTO.getImpactoProducao());
-        calcularNivelProdutoCriticidadePorCategoria(Peso.SEGURANCA.getCategoria(), criticidadeDTO.getFrequenciaImpactoSeguranca(), criticidadeDTO.getImpactoSeguranca());
-        calcularNivelProdutoCriticidadePorCategoria(Peso.AMBIENTAL.getCategoria(), criticidadeDTO.getFrequenciaImpactoAmbiental(), criticidadeDTO.getImpactoAmbiental());
-        calcularNivelProdutoCriticidadePorCategoria(Peso.CUSTO_REPARO.getCategoria(), criticidadeDTO.getFrequenciaCustoReparo(), criticidadeDTO.getCustoReparo());
-        calcularNivelProdutoCriticidadePorCategoria(Peso.FALHA.getCategoria(), criticidadeDTO.getFrequenciaFalha(), criticidadeDTO.getImpactoFalha());
+        validarCamposCriticidade(criticidadeDTO);
+
+        calcularNivelProdutoCriticidadePorCategoria(
+                Peso.PRODUCAO.getCategoria(),
+                criticidadeDTO.getFrequenciaImpactoProducao(),
+                criticidadeDTO.getImpactoProducao()
+        );
+
+        calcularNivelProdutoCriticidadePorCategoria(
+                Peso.SEGURANCA.getCategoria(),
+                criticidadeDTO.getFrequenciaImpactoSeguranca(),
+                criticidadeDTO.getImpactoSeguranca()
+        );
+
+        calcularNivelProdutoCriticidadePorCategoria(
+                Peso.AMBIENTAL.getCategoria(),
+                criticidadeDTO.getFrequenciaImpactoAmbiental(),
+                criticidadeDTO.getImpactoAmbiental()
+        );
+
+        calcularNivelProdutoCriticidadePorCategoria(
+                Peso.CUSTO_REPARO.getCategoria(),
+                criticidadeDTO.getFrequenciaCustoReparo(),
+                criticidadeDTO.getCustoReparo()
+        );
+
+        calcularNivelProdutoCriticidadePorCategoria(
+                Peso.FALHA.getCategoria(),
+                criticidadeDTO.getFrequenciaFalha(),
+                criticidadeDTO.getImpactoFalha()
+        );
+    }
+
+    private void validarCamposCriticidade(CriticidadeDTO dto) {
+        if (dto.getImpactoProducao() == null || dto.getFrequenciaImpactoProducao() == null ||
+                dto.getImpactoSeguranca() == null || dto.getFrequenciaImpactoSeguranca() == null ||
+                dto.getImpactoAmbiental() == null || dto.getFrequenciaImpactoAmbiental() == null ||
+                dto.getCustoReparo() == null || dto.getFrequenciaCustoReparo() == null ||
+                dto.getImpactoFalha() == null || dto.getFrequenciaFalha() == null) {
+
+            throw new IllegalArgumentException("Todos os campos de impacto e frequência devem ser preenchidos.");
+        }
     }
 
     public double finalizarCalculoDeNivel() {
-        double somaDosPesos = Peso.PRODUCAO.getValor() + Peso.SEGURANCA.getValor() + Peso.AMBIENTAL.getValor() + Peso.CUSTO_REPARO.getValor() + Peso.FALHA.getValor();
-        double somaProdutos = 0.0;
 
-        for (double produtos : produtoCalculadoPorCategoria.values()) {
-            somaProdutos += produtos;
+        if (produtoCalculadoPorCategoria.isEmpty()) {
+            throw new IllegalStateException("Nenhum cálculo de criticidade foi realizado.");
         }
+
+        double somaDosPesos = Peso.PRODUCAO.getValor()
+                + Peso.SEGURANCA.getValor()
+                + Peso.AMBIENTAL.getValor()
+                + Peso.CUSTO_REPARO.getValor()
+                + Peso.FALHA.getValor();
+
+        double somaProdutos = produtoCalculadoPorCategoria.values()
+                .stream()
+                .mapToDouble(Double::doubleValue)
+                .sum();
 
         return somaProdutos / somaDosPesos;
     }
 
     public String definirNivelFinal(double pontuacaoCalculada) {
+        if (pontuacaoCalculada < 0) {
+            throw new IllegalArgumentException("Pontuação calculada inválida: " + pontuacaoCalculada);
+        }
+
         if (pontuacaoCalculada <= Nivel.D.getFaixaDeAceite()) return "D";
         if (pontuacaoCalculada <= Nivel.C.getFaixaDeAceite()) return "C";
         if (pontuacaoCalculada <= Nivel.B.getFaixaDeAceite()) return "B";
-
         return "A";
     }
 
     private void calcularNivelProdutoCriticidadePorCategoria(String categoria, String frequencia, String impacto) {
+        if (categoria == null || frequencia == null || impacto == null) {
+            throw new IllegalArgumentException("Categoria, frequência e impacto não podem ser nulos.");
+        }
+
         String nivel = getNivelCriticidadeDeFrequenciaImpactoD(categoria, frequencia, impacto);
 
+        if (nivel.isEmpty()) nivel = getNivelCriticidadeDeFrequenciaImpactoC(categoria, frequencia, impacto);
+        if (nivel.isEmpty()) nivel = getNivelCriticidadeDeFrequenciaImpactoB(categoria, frequencia, impacto);
+        if (nivel.isEmpty()) nivel = getNivelCriticidadeDeFrequenciaImpactoA(categoria, frequencia, impacto);
+
         if (nivel.isEmpty()) {
-            nivel = getNivelCriticidadeDeFrequenciaImpactoC(categoria, frequencia, impacto);
-        }
-        if (nivel.isEmpty()) {
-            nivel = getNivelCriticidadeDeFrequenciaImpactoB(categoria, frequencia, impacto);
-        }
-        if (nivel.isEmpty()) {
-            nivel = getNivelCriticidadeDeFrequenciaImpactoA(categoria, frequencia, impacto);
+            throw new IllegalArgumentException(
+                    "Combinação inválida de impacto/frequência: " + impacto + " - " + frequencia
+            );
         }
     }
 
@@ -231,8 +327,4 @@ public class CriticidadeServiceImpl implements CriticidadeService {
                 .doubleValue();
     }
 
-    @Override
-    public void delete(String id) {
-        repository.deleteById(id);
-    }
 }
