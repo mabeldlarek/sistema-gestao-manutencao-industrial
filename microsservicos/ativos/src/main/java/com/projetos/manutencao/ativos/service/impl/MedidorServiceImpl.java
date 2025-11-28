@@ -1,7 +1,6 @@
 package com.projetos.manutencao.ativos.service.impl;
 
 import com.projetos.manutencao.ativos.DTO.MedidorDTO;
-import com.projetos.manutencao.ativos.model.Criticidade;
 import com.projetos.manutencao.ativos.model.Equipamento;
 import com.projetos.manutencao.ativos.model.Medidor;
 import com.projetos.manutencao.ativos.repository.EquipamentoRepository;
@@ -11,10 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class MedidorServiceImpl implements MedidorService {
@@ -30,13 +26,24 @@ public class MedidorServiceImpl implements MedidorService {
     }
 
     public Medidor create(String idEquipamento, MedidorDTO medidorDTO) {
+
+        if (idEquipamento == null || idEquipamento.isBlank()) {
+            throw new IllegalArgumentException("ID do equipamento não pode ser vazio.");
+        }
+
+        if (medidorDTO == null) {
+            throw new IllegalArgumentException("Objeto MdidorDTO não pode ser nulo.");
+        }
+
+
         Medidor medidor = modelMapper.map(medidorDTO, Medidor.class);
         medidor.setId(UUID.randomUUID().toString());
 
         Equipamento equipamento = equipamentoRepository.findById(idEquipamento)
-                .orElseThrow(() -> new RuntimeException("Equipamento não encontrado"));
+                .orElseThrow(() -> new NoSuchElementException("Equipamento não encontrado"));
 
         List<String> ids = equipamento.getMedidorIds();
+
         if (ids == null) {
             ids = new ArrayList<>();
         }
@@ -53,14 +60,39 @@ public class MedidorServiceImpl implements MedidorService {
     }
 
     public List<Medidor> findByEquipamento(String equipamentoId) {
-        return repository.findByEquipamentoId(equipamentoId);
+        if (equipamentoId == null || equipamentoId.isBlank()) {
+            throw new IllegalArgumentException("ID não pode ser vazio.");
+        }
+
+        List<Medidor> resultado = repository.findByEquipamentoId(equipamentoId);
+
+        if (resultado == null || resultado.isEmpty()) {
+            throw new NoSuchElementException("Nenhum medidor encontrado para o equipamento informado");
+        }
+
+        return resultado;
+
     }
 
-    public Optional<Medidor> findById(String id) {
-        return repository.findById(id);
+    public Medidor findById(String id) {
+
+        if (id == null || id.isBlank()) {
+            throw new IllegalArgumentException("ID não pode ser vazio.");
+        }
+
+        return repository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Medidor não encontrado: " + id));
     }
 
     public void delete(String id) {
+        if (id == null || id.isBlank()) {
+            throw new IllegalArgumentException("ID não pode ser vazio.");
+        }
+
+        if (!repository.existsById(id)) {
+            throw new NoSuchElementException("Medidor não encontrado para exclusão: " + id);
+        }
+
         repository.deleteById(id);
     }
 }
