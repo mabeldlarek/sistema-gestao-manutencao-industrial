@@ -12,6 +12,7 @@ import com.projetos.manutencao.ordem_manutencao.model.ChecklistItem;
 import com.projetos.manutencao.ordem_manutencao.model.OrdemManutencao;
 import com.projetos.manutencao.ordem_manutencao.model.PeriodoTrabalho;
 import com.projetos.manutencao.ordem_manutencao.repository.OrdemManutencaoRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.Local;
@@ -58,7 +59,9 @@ public class ExecucaoOrdemServiceImpl implements ExecucaoOrdemService {
 
         execucao.setChecklistItens(checklistItemList);
 
-        OrdemManutencao om = repositoryOM.findById(execucao.getOrdemManutencaoID()).get();
+        OrdemManutencao om = repositoryOM.findById(execucao.getOrdemManutencaoID())
+                .orElseThrow(() -> new EntityNotFoundException("Ordem não encontrada"));
+
         om.setStatus(StatusOrdem.EM_EXECUCAO);
 
 
@@ -67,6 +70,14 @@ public class ExecucaoOrdemServiceImpl implements ExecucaoOrdemService {
 
     @Override
     public Optional<ExecucaoOrdem> buscarPorId(String id) {
+        if (id == null || id.isBlank()) {
+            throw new IllegalArgumentException("ID não pode ser vazio.");
+        }
+
+        if (!repository.existsById(id)) {
+            throw new NoSuchElementException("Ordem de Execução não encontrada : " + id);
+        }
+
         return repository.findById(id);
     }
 
@@ -77,6 +88,14 @@ public class ExecucaoOrdemServiceImpl implements ExecucaoOrdemService {
 
     @Override
     public ExecucaoOrdem atualizarExecucao(String id, ExecucaoOrdemDTO execucaoOrdemDTO) {
+        if (id == null || id.isBlank()) {
+            throw new IllegalArgumentException("ID não pode ser vazio.");
+        }
+
+        if (!repository.existsById(id)) {
+            throw new NoSuchElementException("Ordem de Execução não encontrada para atualização: " + id);
+        }
+
         if (repository.existsById(id)) {
             ExecucaoOrdem execucao = modelMapper.map(execucaoOrdemDTO, ExecucaoOrdem.class);
             execucao.setId(id);
@@ -87,6 +106,14 @@ public class ExecucaoOrdemServiceImpl implements ExecucaoOrdemService {
 
     @Override
     public void deletarExecucao(String id) {
+        if (id == null || id.isBlank()) {
+            throw new IllegalArgumentException("ID não pode ser vazio.");
+        }
+
+        if (!repository.existsById(id)) {
+            throw new NoSuchElementException("Ordem de Execução não encontrada para atualização: " + id);
+        }
+
         repository.deleteById(id);
     }
 
@@ -95,7 +122,6 @@ public class ExecucaoOrdemServiceImpl implements ExecucaoOrdemService {
         ExecucaoOrdem execucao = repository.findById(id).get();
         verificarCondicaoPausa(execucao);
         forListaPeriodoTrabalhoPausa(execucao);
-
      }
 
      private void forListaPeriodoTrabalhoPausa(ExecucaoOrdem execucao){
@@ -165,6 +191,14 @@ public class ExecucaoOrdemServiceImpl implements ExecucaoOrdemService {
 
     @Override
     public void finalizarExecucao(String id) {
+        if (id == null || id.isBlank()) {
+            throw new IllegalArgumentException("ID não pode ser vazio.");
+        }
+
+        if (!repository.existsById(id)) {
+            throw new NoSuchElementException("Não foi encontrada a Ordem de Execução: " + id);
+        }
+
         ExecucaoOrdem execucao = repository.findById(id).get();
 
         forListaPeriodoTrabalhoPausa(execucao);
@@ -184,6 +218,14 @@ public class ExecucaoOrdemServiceImpl implements ExecucaoOrdemService {
         //montar o objeto checklist descricao = string
         // todos os concluidos com false
 
+        if (idOM == null || idOM.isBlank()) {
+            throw new IllegalArgumentException("ID não pode ser vazio.");
+        }
+
+        if (!repository.existsById(idOM)) {
+            throw new NoSuchElementException("Ordem de Manutenção não encontrada para o checklist: " + idOM);
+        }
+
         OrdemManutencao om = repositoryOM.findById(idOM).get();
         String idProcedimento = om.getProcedimentoID();
 
@@ -196,7 +238,6 @@ public class ExecucaoOrdemServiceImpl implements ExecucaoOrdemService {
 
         return checklistItemList;
     }
-
 
 
 }

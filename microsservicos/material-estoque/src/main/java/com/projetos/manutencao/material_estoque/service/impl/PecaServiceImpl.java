@@ -40,7 +40,7 @@ public class PecaServiceImpl implements PecaService {
 
     public Peca buscarPorId(UUID id) {
         if (!repository.existsById(id)) {
-            throw new NoSuchElementException("Equipamento não encontrado para atualização: " + id);git
+            throw new NoSuchElementException("Equipamento não encontrado para atualização: " + id);
         }
 
         return repository.findById(id).orElse(null);

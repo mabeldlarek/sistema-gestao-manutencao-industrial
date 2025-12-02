@@ -1,9 +1,6 @@
 package com.projetos.manutencao.ordem_manutencao.service.impl;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.projetos.manutencao.ordem_manutencao.DTO.FuncionarioDTO;
@@ -32,7 +29,6 @@ public class OrdemManutencaoServiceImpl implements OrdemManutencaoService {
 
     private final OrdemManutencaoRepository repository;
     private final PlanoManutencaoRepository planoManutencaoRepository;
-    private final FuncionarioClient funcionarioClient;
     private final EquipamentoClient equipamentoClient;
 
     @Autowired
@@ -40,10 +36,9 @@ public class OrdemManutencaoServiceImpl implements OrdemManutencaoService {
     @Autowired
     private OrdemManutencaoRepository repo;
 
-    public OrdemManutencaoServiceImpl(OrdemManutencaoRepository repository, PlanoManutencaoRepository planoManutencaoRepository, FuncionarioClient funcionarioClient, EquipamentoClient equipamentoClient) {
+    public OrdemManutencaoServiceImpl(OrdemManutencaoRepository repository, PlanoManutencaoRepository planoManutencaoRepository, EquipamentoClient equipamentoClient) {
         this.repository = repository;
         this.planoManutencaoRepository = planoManutencaoRepository;
-        this.funcionarioClient = funcionarioClient;
         this.equipamentoClient = equipamentoClient;
     }
 
@@ -56,6 +51,13 @@ public class OrdemManutencaoServiceImpl implements OrdemManutencaoService {
 
     @Override
     public Optional<OrdemManutencao> findById(String id) {
+        if (id == null || id.isBlank()) {
+            throw new IllegalArgumentException("ID não pode ser vazio.");
+        }
+
+        if (!repository.existsById(id)) {
+            throw new NoSuchElementException("OM não encontrada: " + id);
+        }
         return repository.findById(id);
     }
 
@@ -66,6 +68,14 @@ public class OrdemManutencaoServiceImpl implements OrdemManutencaoService {
 
     @Override
     public OrdemManutencao update(String id, OrdemManutencaoDTO ordemManutencaoDTO) {
+        if (id == null || id.isBlank()) {
+            throw new IllegalArgumentException("ID não pode ser vazio.");
+        }
+
+        if (!repository.existsById(id)) {
+            throw new NoSuchElementException("OM não encontrada para atualização: " + id);
+        }
+
         OrdemManutencao ordemManutencao = modelMapper.map(ordemManutencaoDTO, OrdemManutencao.class);
 
         if (repository.existsById(id)) {
@@ -77,10 +87,25 @@ public class OrdemManutencaoServiceImpl implements OrdemManutencaoService {
 
     @Override
     public void delete(String id) {
+        if (id == null || id.isBlank()) {
+            throw new IllegalArgumentException("ID não pode ser vazio.");
+        }
+
+        if (!repository.existsById(id)) {
+            throw new NoSuchElementException("OM não encontrada para exclusão: " + id);
+        }
+
         repository.deleteById(id);
     }
 
     public OrdemManutencao gerarOM(String idPM) {
+        if (idPM == null || idPM.isBlank()) {
+            throw new IllegalArgumentException("ID não pode ser vazio.");
+        }
+
+        if (!planoManutencaoRepository.existsById(idPM)) {
+            throw new NoSuchElementException("Plano de Manutenção não encontrada para gerar OM: " + idPM);
+        }
 
         PlanoManutencao pm = planoManutencaoRepository.findById(idPM).get();
 
@@ -100,6 +125,14 @@ public class OrdemManutencaoServiceImpl implements OrdemManutencaoService {
 
     @Override
     public void updateStatus(String idOm, UpdateStatusOrdemDTO status) {
+        if (idOm == null || idOm.isBlank()) {
+            throw new IllegalArgumentException("ID não pode ser vazio.");
+        }
+
+        if (!repository.existsById(idOm)) {
+            throw new NoSuchElementException("OM não encontrada para atualização: " + idOm);
+        }
+
         OrdemManutencao om = repository.findById(idOm).get();
         StatusOrdem statusOrdem = modelMapper.map(status, StatusOrdem.class);
 
@@ -110,6 +143,13 @@ public class OrdemManutencaoServiceImpl implements OrdemManutencaoService {
     }
 
     private String selecionaResponsavelOM(String idPlano){
+        if (idPlano == null || idPlano.isBlank()) {
+            throw new IllegalArgumentException("ID não pode ser vazio.");
+        }
+        if (!planoManutencaoRepository.existsById(idPlano)) {
+            throw new NoSuchElementException("Plano de Manutenção não encontrada para selecionar responsável: " + idPlano);
+        }
+
         PlanoManutencao pm = planoManutencaoRepository.findById(idPlano).get();
         List<String> idsResponsaveis = pm.getResponsaveisPadraoID();
 
@@ -125,10 +165,6 @@ public class OrdemManutencaoServiceImpl implements OrdemManutencaoService {
     }
 
     private Prioridade getPrioridadeCriticidadeEquipamento(String idEquipamento){
-        // acessar serviço do equipamento
-        // obter idCriticidade
-        // obter criticidade
-
         String nivel = equipamentoClient.getNivelCriticidadeEquipamento(idEquipamento);
 
         switch (nivel) {
