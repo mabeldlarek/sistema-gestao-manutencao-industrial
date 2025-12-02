@@ -10,4 +10,6 @@ import java.util.List;
 public interface MedidorRepository extends MongoRepository<Medidor, String> {
 
     List<Medidor> findByEquipamentoId(String equipamentoId);
+    void deleteByEquipamentoId(String id);
+
 }

@@ -11,6 +11,8 @@ import org.springframework.data.mongodb.repository.Query;
 
 public interface EquipamentoRepository extends MongoRepository<Equipamento, String> {
     List<Equipamento> findByCodigo(String codigo);
-
+    Equipamento findByCriticidadeID(String criticidadeID);
     List<Equipamento> findByPathStartingWithOrderByPathAsc(String prefixo);
+    void deleteByPathStartingWith(String path);
+
 }

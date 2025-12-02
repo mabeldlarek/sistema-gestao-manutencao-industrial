@@ -10,6 +10,7 @@ import com.projetos.manutencao.ativos.DTO.CriticidadeDTO;
 import com.projetos.manutencao.ativos.DTO.EquipamentoDTO;
 import com.projetos.manutencao.ativos.model.Criticidade;
 import com.projetos.manutencao.ativos.repository.CriticidadeRepository;
+import com.projetos.manutencao.ativos.repository.MedidorRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -26,13 +27,15 @@ public class EquipamentoServiceImpl implements EquipamentoService {
 
     private final EquipamentoRepository repository;
     private final CriticidadeRepository criticidadeRepository;
+    private final MedidorRepository medidorRepository;
 
     @Autowired
     private ModelMapper modelMapper;
 
-    public EquipamentoServiceImpl(EquipamentoRepository repository, CriticidadeRepository criticidadeRepository) {
+    public EquipamentoServiceImpl(EquipamentoRepository repository, CriticidadeRepository criticidadeRepository, MedidorRepository medidorRepository) {
         this.repository = repository;
         this.criticidadeRepository = criticidadeRepository;
+        this.medidorRepository = medidorRepository;
     }
 
     @Override
@@ -86,11 +89,25 @@ public class EquipamentoServiceImpl implements EquipamentoService {
             throw new IllegalArgumentException("ID não pode ser vazio.");
         }
 
-        if (!repository.existsById(id)) {
-            throw new NoSuchElementException("Equipamento não encontrado para exclusão: " + id);
-        }
+        Equipamento equipamento = repository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Equipamento não encontrado para exclusão:" + id));
 
         repository.deleteById(id);
+
+        if (!equipamento.getCriticidadeID().isEmpty()) {
+           Criticidade criticidade = criticidadeRepository.findById(equipamento.getCriticidadeID()).get();
+           criticidadeRepository.delete(criticidade);
+        }
+
+        if(!equipamento.getMedidorIds().isEmpty()){
+            medidorRepository.deleteByEquipamentoId(id);
+        }
+
+        String equipamentoCodigo = equipamento.getCodigo();
+        if(!repository.findByPathStartingWithOrderByPathAsc(equipamentoCodigo).isEmpty()){
+            repository.deleteByPathStartingWith(equipamentoCodigo);
+        }
+
     }
 
     @Override

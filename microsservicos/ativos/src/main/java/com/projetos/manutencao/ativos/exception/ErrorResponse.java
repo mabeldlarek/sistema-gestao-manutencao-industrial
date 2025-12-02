@@ -25,7 +25,6 @@ public class ErrorResponse {
         this.path = path;
     }
 
-    // getters e setters
     public LocalDateTime getTimestamp() { return timestamp; }
     public int getStatus() { return status; }
     public String getError() { return error; }
