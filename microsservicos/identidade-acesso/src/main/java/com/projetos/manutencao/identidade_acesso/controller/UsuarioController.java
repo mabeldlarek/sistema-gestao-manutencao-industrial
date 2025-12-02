@@ -56,8 +56,8 @@ public class UsuarioController {
 
     @PutMapping("usuarios/{id}")
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-    public ResponseEntity<Object> updateUsuario(HttpServletRequest request, @Valid @RequestBody UsuarioDTO usuario) {
-        usuarioService.update(usuario);
+    public ResponseEntity<Object> updateUsuario(HttpServletRequest request, @PathVariable UUID id, @Valid @RequestBody UsuarioDTO usuario) {
+        usuarioService.update(id, usuario);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

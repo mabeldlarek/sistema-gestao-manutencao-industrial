@@ -17,7 +17,7 @@ public interface FuncionarioService {
 
     public void deleteById(String id);
 
-    public void update(FuncionarioDTO funcionario);
+    public void update(String id, FuncionarioDTO funcionario);
 
     public Optional<Funcionario> findByMatricula(String matricula);
     public void vincularUsuarioAFuncionario(Funcionario funcionarioComUsuario);

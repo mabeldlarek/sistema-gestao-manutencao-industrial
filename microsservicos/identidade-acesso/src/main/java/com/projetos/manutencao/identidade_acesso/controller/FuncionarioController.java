@@ -56,14 +56,13 @@ public class FuncionarioController {
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable String id) {
         usuarioFuncionarioService.deleteByIdUsuarioVinculado(id);
-
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-    public ResponseEntity<Void> put(@Valid @RequestBody FuncionarioDTO funcionario) {
-        service.update(funcionario);
+    public ResponseEntity<Void> put(@PathVariable String id, @Valid @RequestBody FuncionarioDTO funcionario) {
+        service.update(id, funcionario);
         return ResponseEntity.ok().build();
     }
 

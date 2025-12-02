@@ -1,6 +1,7 @@
 package com.projetos.manutencao.identidade_acesso.service.impl;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -37,38 +38,62 @@ public class FuncionarioServiceImpl implements FuncionarioService {
     }
 
     public Funcionario save(FuncionarioDTO funcionarioDTO) {
+        if (funcionarioDTO == null) {
+            throw new IllegalArgumentException("Objeto funcionarioDTO não pode ser nulo.");
+        }
+
         Funcionario funcionario = modelMapper.map(funcionarioDTO, Funcionario.class);
+
+        if (funcionario.getId() == null || funcionario.getId().isBlank()) {
+            funcionario.setId(UUID.randomUUID().toString());
+        }
+
         repository.save(funcionario);
         return repository.save(funcionario);
     }
 
     public void deleteById(String id) {
-        Optional<Funcionario> funcionario = repository.findById(id.toString());
-        if (funcionario.isPresent()) {
-            repository.deleteById(id);
+        if (id == null || id.isBlank()) {
+            throw new IllegalArgumentException("ID não pode ser vazio.");
         }
+        
+        if (!repository.existsById(id)) {
+            throw new NoSuchElementException("funcionario não encontrado para exclusão: " + id);
+        }
+        
+        repository.deleteById(id);
+        
     }
 
     @Override
-    public void update(FuncionarioDTO funcionarioDTO) {
-        Funcionario funcionario = repository.findByMatricula(funcionarioDTO.getMatricula())
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Funcionário não encontrado com a matrícula: " + funcionarioDTO.getMatricula()
-                ));
+    public void update(String id, FuncionarioDTO funcionarioDTO) {
 
-        funcionario.setCargo(funcionarioDTO.getCargo());
-        funcionario.setEquipe(funcionarioDTO.getEquipe());
-        funcionario.setEspecialidades(funcionarioDTO.getEspecialidades());
-        funcionario.setNome(funcionarioDTO.getNome());
-        funcionario.setStatus(funcionarioDTO.getStatus());
+        if (id == null || id.isBlank()) {
+            throw new IllegalArgumentException("ID não pode ser vazio.");
+        }
+
+        if (funcionarioDTO == null) {
+            throw new IllegalArgumentException("Objeto funcionarioDTO não pode ser nulo.");
+        }
+
+        if (!repository.existsById(id)) {
+            throw new NoSuchElementException("Funcionario não encontrado para atualização: " + id);
+        }
+
+        Funcionario funcionario = modelMapper.map(funcionarioDTO, Funcionario.class);
+        funcionario.setId(id);
 
         repository.save(funcionario);
     }
 
     @Override
     public Optional<Funcionario> findByMatricula(String matricula) {
+        if (matricula == null || matricula.isBlank()) {
+            throw new IllegalArgumentException("Matricula não pode ser vazia.");
+        }
+
         Optional<Funcionario> funcionario = Optional.ofNullable(repository.findByMatricula(matricula)
-                .orElseThrow(() -> new EntityNotFoundException(
+                .orElseThrow(() -> new NoSuchElementException(
                         "Funcionário não encontrado com a matrícula: " + matricula
                 )));
 
@@ -81,8 +106,11 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 
     @Override
     public Optional<Funcionario> findByUsuarioID(String usuarioId) {
+        if (usuarioId == null || usuarioId.isBlank()) {
+            throw new IllegalArgumentException("ID não pode ser vazio.");
+        }
         Optional<Funcionario> funcionario = Optional.ofNullable(repository.findByUsuarioId(usuarioId)
-                .orElseThrow(() -> new EntityNotFoundException(
+                .orElseThrow(() -> new NoSuchElementException(
                         "Funcionário não encontrado"
                 )));
 

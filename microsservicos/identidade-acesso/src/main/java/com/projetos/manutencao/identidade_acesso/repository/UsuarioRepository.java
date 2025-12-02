@@ -15,4 +15,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, UUID> {
     @Override
     Optional<Usuario> findById(UUID id);
     Optional<Usuario> findByNome(String name);
+    boolean existsByEmail(String email);
+
 }

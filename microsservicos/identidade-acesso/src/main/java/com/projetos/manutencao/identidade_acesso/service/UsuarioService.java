@@ -12,7 +12,7 @@ public interface UsuarioService {
     Usuario findByEmail(String email);
     void save(UsuarioDTO Usuario);
     void deleteById(UUID id);
-    void update(UsuarioDTO usuario);
+    void update(UUID id, UsuarioDTO usuario);
     Usuario findById(UUID id);
     List<Usuario> findAll();
 

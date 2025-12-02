@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import com.projetos.manutencao.identidade_acesso.dto.auth.FuncionarioDTO;
 import com.projetos.manutencao.identidade_acesso.dto.auth.UsuarioDTO;
@@ -32,48 +33,111 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public UsuarioServiceImpl(UsuarioRepository usuarioRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
-        this.repository = usuarioRepository;
+    public UsuarioServiceImpl(
+            UsuarioRepository repository,
+            RoleRepository roleRepository,
+            PasswordEncoder passwordEncoder
+    ) {
+        this.repository = repository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public void update(UsuarioDTO usuarioAtualizado) {
-        Usuario existente = repository.findByEmail(usuarioAtualizado.getEmail())
-                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com o e-mail: " + usuarioAtualizado.getEmail()));
+    public void update(UUID id, UsuarioDTO usuarioDTO) {
 
-        existente.setNome(usuarioAtualizado.getNomeUsuario());
-        existente.setEmail(usuarioAtualizado.getEmail());
-        existente.setTipoUsuario(usuarioAtualizado.getTipoUsuario());
-        existente.setSenha(passwordEncoder.encode(usuarioAtualizado.getSenha()));
+        if (id == null) {
+            throw new IllegalArgumentException("ID não pode ser vazio.");
+        }
+
+        UUID uuid;
+        try {
+            uuid = id;
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("ID informado não é válido.");
+        }
+
+        Usuario existente = repository.findById(uuid)
+                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com o id: " + id));
+
+        existente.setNome(usuarioDTO.getNomeUsuario());
+        existente.setEmail(usuarioDTO.getEmail());
+        existente.setTipoUsuario(usuarioDTO.getTipoUsuario());
+
+        if (usuarioDTO.getSenha() != null && !usuarioDTO.getSenha().isBlank()) {
+            existente.setSenha(passwordEncoder.encode(usuarioDTO.getSenha()));
+        }
+
+        if (usuarioDTO.getRoles() != null && !usuarioDTO.getRoles().isEmpty()) {
+            Set<Role> roles = usuarioDTO.getRoles().stream()
+                    .map(role -> roleRepository.findByNameIgnoreCase(role.getName())
+                            .orElseThrow(() -> new EntityNotFoundException("Role não encontrada: " + role.getName())))
+                    .collect(Collectors.toSet());
+
+            existente.setRoles(roles);
+        }
+
         repository.save(existente);
     }
 
+
     @Override
     public Usuario findByEmail(String email) {
-        return repository.findByEmail(email).get();
+        return repository.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com o e-mail: " + email));
     }
+
 
     @Override
     public void deleteById(UUID id) {
+
+        if (id == null) {
+            throw new IllegalArgumentException("ID não pode ser nulo.");
+        }
+
         Usuario existente = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
 
-        repository.deleteById(id);
+        repository.delete(existente);
     }
+
 
     @Override
     public Usuario findById(UUID id) {
-        return repository.findById(id).orElse(null);
+        if (id == null) {
+            throw new IllegalArgumentException("ID não pode ser nulo.");
+        }
+
+        return repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
     }
+
 
     @Override
     public void save(UsuarioDTO usuarioDTO) {
-        var basicRole = roleRepository.findByNameIgnoreCase(Role.Values.BASIC.name());
+
+        if (repository.existsByEmail(usuarioDTO.getEmail())) {
+            throw new IllegalStateException("Já existe um usuário cadastrado com este e-mail.");
+        }
+
+        Set<Role> roles;
+        if (usuarioDTO.getRoles() == null || usuarioDTO.getRoles().isEmpty()) {
+            Role basic = roleRepository.findByNameIgnoreCase(Role.Values.BASIC.name())
+                    .orElseThrow(() -> new EntityNotFoundException("Role BASIC não encontrada no banco."));
+
+            roles = Set.of(basic);
+        } else {
+            roles = usuarioDTO.getRoles().stream()
+                    .map(role -> roleRepository.findByNameIgnoreCase(role.getName())
+                            .orElseThrow(() ->
+                                    new EntityNotFoundException("Role não encontrada: " + role.getName())))
+                    .collect(Collectors.toSet());
+        }
+
         Usuario usuario = modelMapper.map(usuarioDTO, Usuario.class);
         usuario.setSenha(passwordEncoder.encode(usuarioDTO.getSenha()));
-        usuario.setRoles(Set.of(basicRole));
+        usuario.setRoles(roles);
+
         repository.save(usuario);
     }
 

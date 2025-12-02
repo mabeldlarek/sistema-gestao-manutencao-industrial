@@ -9,6 +9,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.Optional;
 import java.util.Set;
 
 @Configuration
@@ -30,7 +31,7 @@ public class AdminUserConfig implements CommandLineRunner {
     @Transactional
     public void run(String... args) throws Exception {
 
-        Role roleAdmin = roleRepository.findByNameIgnoreCase(Role.Values.ADMIN.name());
+        Optional<Role> roleAdmin = roleRepository.findByNameIgnoreCase(Role.Values.ADMIN.name());
 
         if (roleAdmin == null) {
             throw new RuntimeException("Role ADMIN não encontrada");
@@ -44,9 +45,9 @@ public class AdminUserConfig implements CommandLineRunner {
                     var user = new Usuario();
                     user.setNome("ADMIN");
                     user.setSenha(passwordEncoder.encode("123"));
-                    user.setRoles(Set.of(roleAdmin));
+                    user.setRoles(Set.of(roleAdmin.get()));
                     user.setAtivo(true);
-                    user.setTipoUsuario(roleAdmin.getName());
+                    user.setTipoUsuario(roleAdmin.get().getName());
                     user.setEmail("email@teste.com");
                     userRepository.save(user);
                 }
