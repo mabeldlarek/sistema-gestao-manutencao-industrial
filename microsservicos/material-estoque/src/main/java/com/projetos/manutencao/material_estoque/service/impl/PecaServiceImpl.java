@@ -1,6 +1,7 @@
 package com.projetos.manutencao.material_estoque.service.impl;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.logging.Logger;
 
@@ -25,8 +26,11 @@ public class PecaServiceImpl implements PecaService {
     }
 
     public Peca salvar(PecaDTO pecaDto) {
+        if (pecaDto == null) {
+            throw new IllegalArgumentException("Objeto PecaDTO não pode ser nulo.");
+        }
+
         Peca peca = modelMapper.map(pecaDto, Peca.class);
-        System.out.println(peca.toString());
         return repository.save(peca);
     }
 
@@ -35,10 +39,22 @@ public class PecaServiceImpl implements PecaService {
     }
 
     public Peca buscarPorId(UUID id) {
+        if (!repository.existsById(id)) {
+            throw new NoSuchElementException("Equipamento não encontrado para atualização: " + id);git
+        }
+
         return repository.findById(id).orElse(null);
     }
 
     public void deletar(UUID id) {
+        if (id == null) {
+            throw new IllegalArgumentException("ID não pode ser vazio.");
+        }
+
+        if (!repository.existsById(id)) {
+            throw new NoSuchElementException("Equipamento não encontrado para atualização: " + id);
+        }
+
         repository.deleteById(id);
     }
 

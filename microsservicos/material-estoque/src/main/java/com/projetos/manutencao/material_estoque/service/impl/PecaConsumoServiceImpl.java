@@ -1,6 +1,7 @@
 package com.projetos.manutencao.material_estoque.service.impl;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 import com.projetos.manutencao.material_estoque.dto.PecaConsumoDTO;
@@ -28,7 +29,12 @@ public class PecaConsumoServiceImpl implements PecaConsumoService {
     }
 
     public PecaConsumo salvar(PecaConsumoDTO consumoDTO) {
+        if (consumoDTO == null) {
+            throw new IllegalArgumentException("Objeto ConsumoDTO não pode ser nulo.");
+        }
+
         PecaConsumo pecaConsumo = modelMapper.map(consumoDTO, PecaConsumo.class);
+
         modificarEstoqueDisponivel(consumoDTO);
         return repository.save(pecaConsumo);
     }
@@ -42,18 +48,38 @@ public class PecaConsumoServiceImpl implements PecaConsumoService {
     }
 
     public void deletar(UUID id) {
+        if (id == null) {
+            throw new IllegalArgumentException("ID não pode ser vazio.");
+        }
+
+        if (!repository.existsById(id)) {
+            throw new NoSuchElementException("Equipamento não encontrado para atualização: " + id);
+        }
+
         repository.deleteById(id);
     }
 
     public PecaConsumo update(UUID id, PecaConsumoDTO consumoDTO) {
+        if (id == null) {
+            throw new IllegalArgumentException("ID não pode ser vazio.");
+        }
+
+        if (consumoDTO == null) {
+            throw new IllegalArgumentException("Objeto ConsumoDTO não pode ser nulo.");
+        }
+
         PecaConsumo existente = repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Consumo de Peça não encontrada"));
+                .orElseThrow(() -> new NoSuchElementException("Consumo de Peça não encontrada"));
 
         modelMapper.map(consumoDTO, existente);
         return repository.save(existente);
     }
 
     private void modificarEstoqueDisponivel(PecaConsumoDTO pecaConsumoDTO){
+        if (pecaConsumoDTO == null) {
+            throw new IllegalArgumentException("Objeto PecaConsumoDTO não pode ser nulo.");
+        }
+
         Peca peca = pecaRepository.findById(pecaConsumoDTO.getPecaID())
                 .orElseThrow(() -> new EntityNotFoundException("Peça não encontrada"));
 
