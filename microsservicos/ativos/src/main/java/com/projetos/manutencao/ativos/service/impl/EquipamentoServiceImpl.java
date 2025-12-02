@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import com.projetos.manutencao.ativos.DTO.CriticidadeDTO;
 import com.projetos.manutencao.ativos.DTO.EquipamentoDTO;
+import com.projetos.manutencao.ativos.enums.Nivel;
 import com.projetos.manutencao.ativos.model.Criticidade;
 import com.projetos.manutencao.ativos.repository.CriticidadeRepository;
 import com.projetos.manutencao.ativos.repository.MedidorRepository;
@@ -90,9 +91,7 @@ public class EquipamentoServiceImpl implements EquipamentoService {
         }
 
         Equipamento equipamento = repository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Equipamento não encontrado para exclusão:" + id));
-
-        repository.deleteById(id);
+                .orElseThrow(() -> new NoSuchElementException("Equipamento não encontrado: " + id));
 
         if (!equipamento.getCriticidadeID().isEmpty()) {
            Criticidade criticidade = criticidadeRepository.findById(equipamento.getCriticidadeID()).get();
@@ -107,6 +106,8 @@ public class EquipamentoServiceImpl implements EquipamentoService {
         if(!repository.findByPathStartingWithOrderByPathAsc(equipamentoCodigo).isEmpty()){
             repository.deleteByPathStartingWith(equipamentoCodigo);
         }
+
+        repository.deleteById(id);
 
     }
 

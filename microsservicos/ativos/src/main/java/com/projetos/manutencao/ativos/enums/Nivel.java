@@ -5,6 +5,7 @@ public enum Nivel {
     B(3, "B", 3.49),
     C(2, "C", 2.49),
     D(1, "D", 1.49),
+    INDEFINIDO(0, "INDEFINIDO", 0)
     ;
     private final int valor;
     private final String descricao;

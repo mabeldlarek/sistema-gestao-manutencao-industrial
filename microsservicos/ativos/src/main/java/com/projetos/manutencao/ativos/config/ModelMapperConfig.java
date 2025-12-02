@@ -20,13 +20,6 @@ public class ModelMapperConfig {
                 .setSkipNullEnabled(true)
                 .setMatchingStrategy(MatchingStrategies.STRICT);
 
-        mapper.getTypeMaps().forEach(typeMap -> {
-            if (typeMap.getSourceType().equals(EquipamentoDTO.class) &&
-                    typeMap.getDestinationType().equals(Equipamento.class)) {
-                mapper.getTypeMaps().remove(typeMap);
-            }
-        });
-
         return mapper;
     }
 }
