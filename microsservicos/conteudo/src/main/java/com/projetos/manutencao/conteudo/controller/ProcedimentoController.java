@@ -1,4 +1,5 @@
 package com.projetos.manutencao.conteudo.controller;
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,6 +40,7 @@ public class ProcedimentoController {
     @PostMapping
     public ResponseEntity<Procedimento> create(@RequestBody ProcedimentoDTO procedimentoDTO) {
         Procedimento criado = service.create(procedimentoDTO);
+        URI uri = URI.create("api/procedimentos/" + criado.getId());
         return ResponseEntity.ok(criado);
     }
 
@@ -55,9 +57,6 @@ public class ProcedimentoController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Procedimento> update(@PathVariable String id, @RequestBody ProcedimentoDTO procedimentoDTO) {
-        if (!service.findById(id).isPresent()) {
-            return ResponseEntity.notFound().build();
-        }
         Procedimento atualizado = service.update(id, procedimentoDTO);
         return ResponseEntity.ok(atualizado);
     }

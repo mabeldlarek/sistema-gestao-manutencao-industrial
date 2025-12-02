@@ -74,12 +74,21 @@ public class EquipamentoServiceImpl implements EquipamentoService {
 
     @Override
     public Equipamento update(String id, EquipamentoDTO equipamentoDTO) {
-        Equipamento equipamento = modelMapper.map(equipamentoDTO, Equipamento.class);
-        equipamento.setId(id);
+
+        if (id == null || id.isBlank()) {
+            throw new IllegalArgumentException("ID não pode ser vazio.");
+        }
+
+        if (equipamentoDTO == null) {
+            throw new IllegalArgumentException("Objeto EquipamentoDTO não pode ser nulo.");
+        }
 
         if (!repository.existsById(id)) {
-            return null;
+            throw new NoSuchElementException("Equipamento não encontrado para atualização: " + id);
         }
+
+        Equipamento equipamento = modelMapper.map(equipamentoDTO, Equipamento.class);
+        equipamento.setId(id);
 
         return repository.save(equipamento);
     }

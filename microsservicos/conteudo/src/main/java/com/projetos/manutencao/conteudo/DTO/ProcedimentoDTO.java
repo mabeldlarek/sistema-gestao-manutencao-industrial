@@ -45,7 +45,6 @@ public class ProcedimentoDTO {
 
     private List<@NotBlank String> documentosAnexados;
 
-    @PastOrPresent(message = "A data de criação não pode ser futura.")
     private Date dataCriacao;
 
     @PastOrPresent(message = "A data de última revisão não pode ser futura.")
