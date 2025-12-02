@@ -50,7 +50,6 @@ public class EquipamentoDTO {
     @NotBlank(message = "O status operacional é obrigatório")
     private String statusOperacional;
 
-    @NotBlank(message = "A criticidade é obrigatória")
     private String criticidadeID;
 
     private Map<String, Object> parametrosOperacionais;
