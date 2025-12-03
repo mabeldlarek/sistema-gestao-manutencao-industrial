@@ -1,28 +1,11 @@
 package com.projetos.manutencao.identidade_acesso.service.impl;
 
-import com.projetos.manutencao.identidade_acesso.dto.auth.UsuarioDTO;
-import com.projetos.manutencao.identidade_acesso.model.Funcionario;
-import com.projetos.manutencao.identidade_acesso.model.Usuario;
-import com.projetos.manutencao.identidade_acesso.repository.UsuarioRepository;
-import com.projetos.manutencao.identidade_acesso.repository.mongo.FuncionarioRepository;
-import com.projetos.manutencao.identidade_acesso.service.FuncionarioService;
-import com.projetos.manutencao.identidade_acesso.service.UsuarioFuncionarioService;
-import com.projetos.manutencao.identidade_acesso.service.UsuarioService;
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
-
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.UUID;
-
-import com.projetos.manutencao.identidade_acesso.dto.auth.UsuarioDTO;
+import com.projetos.manutencao.identidade_acesso.dto.UsuarioDTO;
 import com.projetos.manutencao.identidade_acesso.model.Funcionario;
 import com.projetos.manutencao.identidade_acesso.model.Usuario;
 import com.projetos.manutencao.identidade_acesso.service.FuncionarioService;
 import com.projetos.manutencao.identidade_acesso.service.UsuarioFuncionarioService;
 import com.projetos.manutencao.identidade_acesso.service.UsuarioService;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 

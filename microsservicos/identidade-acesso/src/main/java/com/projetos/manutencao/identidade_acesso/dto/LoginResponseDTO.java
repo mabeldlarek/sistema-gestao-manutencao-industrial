@@ -1,4 +1,4 @@
-package com.projetos.manutencao.identidade_acesso.dto.auth;
+package com.projetos.manutencao.identidade_acesso.dto;
 
 public record LoginResponseDTO(String accessToken, Long expiresIn){
 }

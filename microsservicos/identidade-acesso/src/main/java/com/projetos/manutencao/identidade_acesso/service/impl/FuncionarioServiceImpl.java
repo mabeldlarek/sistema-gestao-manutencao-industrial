@@ -5,10 +5,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.projetos.manutencao.identidade_acesso.dto.auth.FuncionarioDTO;
-import com.projetos.manutencao.identidade_acesso.repository.UsuarioRepository;
-import com.projetos.manutencao.identidade_acesso.service.UsuarioService;
-import jakarta.persistence.EntityNotFoundException;
+import com.projetos.manutencao.identidade_acesso.dto.FuncionarioDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

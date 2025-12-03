@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
 
-import com.projetos.manutencao.identidade_acesso.dto.auth.LoginRequestDTO;
+import com.projetos.manutencao.identidade_acesso.dto.LoginRequestDTO;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.security.crypto.password.PasswordEncoder;

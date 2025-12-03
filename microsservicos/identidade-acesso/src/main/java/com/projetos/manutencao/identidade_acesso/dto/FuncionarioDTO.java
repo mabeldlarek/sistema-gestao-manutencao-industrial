@@ -1,4 +1,4 @@
-package com.projetos.manutencao.identidade_acesso.dto.auth;
+package com.projetos.manutencao.identidade_acesso.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;

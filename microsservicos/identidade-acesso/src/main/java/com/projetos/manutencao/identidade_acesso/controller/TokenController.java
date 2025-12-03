@@ -1,8 +1,8 @@
 package com.projetos.manutencao.identidade_acesso.controller;
 
 
-import com.projetos.manutencao.identidade_acesso.dto.auth.LoginRequestDTO;
-import com.projetos.manutencao.identidade_acesso.dto.auth.LoginResponseDTO;
+import com.projetos.manutencao.identidade_acesso.dto.LoginRequestDTO;
+import com.projetos.manutencao.identidade_acesso.dto.LoginResponseDTO;
 import com.projetos.manutencao.identidade_acesso.model.Role;
 import com.projetos.manutencao.identidade_acesso.repository.UsuarioRepository;
 import org.springframework.http.ResponseEntity;

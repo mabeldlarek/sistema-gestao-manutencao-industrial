@@ -2,9 +2,8 @@ package com.projetos.manutencao.identidade_acesso.controller;
 
 import java.util.List;
 
-import com.projetos.manutencao.identidade_acesso.dto.auth.FuncionarioDTO;
+import com.projetos.manutencao.identidade_acesso.dto.FuncionarioDTO;
 import com.projetos.manutencao.identidade_acesso.service.UsuarioFuncionarioService;
-import com.projetos.manutencao.identidade_acesso.service.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

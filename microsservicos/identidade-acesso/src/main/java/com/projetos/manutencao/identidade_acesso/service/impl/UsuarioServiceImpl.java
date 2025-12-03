@@ -1,18 +1,13 @@
 package com.projetos.manutencao.identidade_acesso.service.impl;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import com.projetos.manutencao.identidade_acesso.dto.auth.FuncionarioDTO;
-import com.projetos.manutencao.identidade_acesso.dto.auth.UsuarioDTO;
-import com.projetos.manutencao.identidade_acesso.model.Funcionario;
+import com.projetos.manutencao.identidade_acesso.dto.UsuarioDTO;
 import com.projetos.manutencao.identidade_acesso.model.Role;
 import com.projetos.manutencao.identidade_acesso.repository.RoleRepository;
-import com.projetos.manutencao.identidade_acesso.repository.mongo.FuncionarioRepository;
-import com.projetos.manutencao.identidade_acesso.service.FuncionarioService;
 import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
