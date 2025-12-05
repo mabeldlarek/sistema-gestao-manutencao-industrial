@@ -26,8 +26,8 @@ public enum UnidadeMedida {
 
     METROS_POR_SEGUNDO("m/s"),
 
-    RPM("rpm");
-
+    RPM("rpm"),
+    HORAS("horas");
     private final String simbolo;
 
     UnidadeMedida(String simbolo) {
