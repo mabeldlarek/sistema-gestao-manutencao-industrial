@@ -95,4 +95,9 @@ public class MedidorServiceImpl implements MedidorService {
 
         repository.deleteById(id);
     }
+
+    @Override
+    public List<Medidor> findAll() {
+        return repository.findAll();
+    }
 }
