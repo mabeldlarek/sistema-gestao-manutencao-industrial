@@ -1,6 +1,7 @@
 package com.projetos.manutencao.ativos.controller;
 
 import com.projetos.manutencao.ativos.DTO.MedidorDTO;
+import com.projetos.manutencao.ativos.model.Equipamento;
 import com.projetos.manutencao.ativos.model.Medidor;
 import com.projetos.manutencao.ativos.service.MedidorService;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,11 @@ public class MedidorController {
 
     public MedidorController(MedidorService service) {
         this.service = service;
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Medidor>> listAll() {
+        return ResponseEntity.ok(service.findAll());
     }
 
     @PostMapping("/equipamento/{equipamentoId}")
