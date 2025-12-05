@@ -11,5 +11,6 @@ public enum TipoMedidor {
     FLUXO,
     NIVEL,
     VELOCIDADE,
-    RPM
+    RPM,
+    TEMPO
 }
