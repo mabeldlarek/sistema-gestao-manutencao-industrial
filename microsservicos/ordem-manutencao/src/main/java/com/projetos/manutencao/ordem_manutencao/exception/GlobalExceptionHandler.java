@@ -3,7 +3,6 @@ package com.projetos.manutencao.ordem_manutencao.exception;
 import com.mongodb.DuplicateKeyException;
 import com.mongodb.MongoException;
 import com.mongodb.MongoWriteException;
-import com.projetos.manutencao.identidade_acesso.exception.ErrorResponse;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.dao.DataIntegrityViolationException;

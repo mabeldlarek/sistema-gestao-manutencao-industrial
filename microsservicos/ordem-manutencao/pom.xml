@@ -104,12 +104,6 @@
             <groupId>jakarta.persistence</groupId>
             <artifactId>jakarta.persistence-api</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.projetos.manutencao</groupId>
-            <artifactId>identidade-acesso</artifactId>
-            <version>0.0.2-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
 
     <dependencyManagement>
