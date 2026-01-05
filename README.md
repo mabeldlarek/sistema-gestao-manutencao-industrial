@@ -78,6 +78,8 @@ Controle de:
 - ModelMapper
 - Jakarta Validation
 - Maven
+- Docker / Docker Compose
+- Git Hub Actions
 
 --- 
 
