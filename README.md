@@ -81,6 +81,10 @@ Controle de:
 - Docker / Docker Compose
 - Git Hub Actions
 
---- 
+## ⚙️ Diagrama microsserviços
+<img width="1522" height="756" alt="image" src="https://github.com/user-attachments/assets/a24a0f57-e4d2-4261-b4d9-c03ec395121b" />
+
+## ⚙️ Fluxo operacional principal
+<img width="1749" height="851" alt="image" src="https://github.com/user-attachments/assets/c3562141-5e49-4c1e-9339-3994d7fe5c9a" />
 
 🚀 Projeto suscetível a evolução.
