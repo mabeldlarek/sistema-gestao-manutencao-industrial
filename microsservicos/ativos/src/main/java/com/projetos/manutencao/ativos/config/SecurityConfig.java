@@ -18,7 +18,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtDecoder jwtDecoder) throws Exception {
         http
-                .cors(Customizer.withDefaults())
+                .cors(cors -> {})
                 .authorizeHttpRequests(auth -> auth
                         .anyRequest().authenticated())
                 .csrf(csrf -> csrf.disable())
