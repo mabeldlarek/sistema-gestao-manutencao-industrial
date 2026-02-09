@@ -68,7 +68,7 @@ jobs:
           username: ${{ secrets.VM_USER }}
           key: ${{ secrets.VM_SSH_KEY }}
           script: |
-            cd /home/mariabelarek/sistema-gestao-manutencao-industrial
+            cd /home/mariabelarek/sistema-gestao-manutencao-industrial/microsservicos
             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             docker compose pull
             docker compose up -d
