@@ -65,7 +65,8 @@ jobs:
         with:
           host: ${{ secrets.VM_HOST }}
           username: ${{ secrets.VM_USER }}
-          key: ${{ secrets.VM_SSH_KEY }}
-          debug: true
+          key_path: /github/home/.ssh/github_actions
           script: |
-            whoami
+            cd /home/mariabelarek/sistema-gestao-manutencao-industrial/microsservicos
+            docker compose pull
+            docker compose up -d
