@@ -60,15 +60,12 @@ jobs:
           docker build -t ${{ secrets.DOCKER_USERNAME }}/ordem-manutencao:latest microsservicos/ordem-manutencao
           docker push ${{ secrets.DOCKER_USERNAME }}/ordem-manutencao:latest
 
-      # 7️⃣ Deploy automático na VM
       - name: Deploy na VM
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.VM_HOST }}
           username: ${{ secrets.VM_USER }}
           key: ${{ secrets.VM_SSH_KEY }}
+          debug: true
           script: |
-            cd /home/mariabelarek/sistema-gestao-manutencao-industrial/microsservicos
-            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-            docker compose pull
-            docker compose up -d
+            whoami
