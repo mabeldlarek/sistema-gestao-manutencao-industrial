@@ -14,9 +14,7 @@ services:
       - microsservicos-dev
 
   identidade-acesso:
-    build:
-      context: ./identidade-acesso
-      dockerfile: Dockerfile
+    image: mabeldlarek/identidade-acesso:latest
     container_name: ct-identidade-acesso
     ports:
       - "${APP_PORT_IDENTIDADE}:8080"
@@ -32,9 +30,7 @@ services:
       - microsservicos-dev
 
   material-estoque:
-    build:
-      context: ./material-estoque
-      dockerfile: Dockerfile
+    image: mabeldlarek/material-estoque:latest
     container_name: ct-material-estoque
     ports:
       - "${APP_PORT_MATERIAL}:8082"
@@ -43,7 +39,7 @@ services:
       - ./material-estoque/.env
     environment:
       JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
-      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: 'http://identidade-acesso:8080/.well-known/jwks.json'
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: http://identidade-acesso:8080/.well-known/jwks.json
     depends_on:
       - db
       - mongo
@@ -51,9 +47,7 @@ services:
       - microsservicos-dev
 
   conteudo:
-    build:
-      context: ./conteudo
-      dockerfile: Dockerfile
+    image: mabeldlarek/conteudo:latest
     container_name: ct-conteudo
     ports:
       - "${APP_PORT_CONTEUDO}:8086"
@@ -62,16 +56,14 @@ services:
       - ./conteudo/.env
     environment:
       JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
-      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: 'http://identidade-acesso:8080/.well-known/jwks.json'
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: http://identidade-acesso:8080/.well-known/jwks.json
     depends_on:
       - mongo
     networks:
       - microsservicos-dev
 
   ativos:
-    build:
-      context: ./ativos
-      dockerfile: Dockerfile
+    image: mabeldlarek/ativos:latest
     container_name: ct-ativos
     ports:
       - "${APP_PORT_ATIVOS}:8090"
@@ -80,16 +72,14 @@ services:
       - ./ativos/.env
     environment:
       JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
-      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: 'http://identidade-acesso:8080/.well-known/jwks.json'
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: http://identidade-acesso:8080/.well-known/jwks.json
     depends_on:
       - mongo
     networks:
       - microsservicos-dev
 
   ordem-manutencao:
-    build:
-      context: ./ordem-manutencao
-      dockerfile: Dockerfile
+    image: mabeldlarek/ordem-manutencao:latest
     container_name: ct-ordem-manutencao
     ports:
       - "${APP_PORT_OM}:8091"
@@ -98,7 +88,7 @@ services:
       - ./ordem-manutencao/.env
     environment:
       JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
-      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: 'http://identidade-acesso:8080/.well-known/jwks.json'
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: http://identidade-acesso:8080/.well-known/jwks.json
     depends_on:
       - mongo
     networks:

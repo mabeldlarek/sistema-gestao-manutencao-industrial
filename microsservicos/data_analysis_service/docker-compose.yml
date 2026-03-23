@@ -1,0 +1,34 @@
+services:
+  data-analysis:
+    build: .
+    container_name: ct-data-analysis
+    networks:
+      - microsservicos-dev
+    env_file:
+      - .env
+    environment:
+      IDENTIDADE_URL: http://identidade-acesso:8080/login
+      ORDEM_URL: http://ordem-manutencao:8091/api/os
+      EXECUCAO_URL: http://ordem-manutencao:8091/execucoes
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@ct-postgres:5432/analise_db
+    restart: on-failure
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: ct-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana-data:/var/lib/grafana
+    networks:
+      - microsservicos-dev
+    restart: unless-stopped
+
+networks:
+  microsservicos-dev:
+    external: true
+
+volumes:
+  grafana-data:

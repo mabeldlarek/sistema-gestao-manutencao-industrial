@@ -1,0 +1,8 @@
+version: "3.9"
+services:
+  data_analysis:
+    build: .
+    container_name: data_analysis
+    depends_on:
+      - identidade-acesso
+      - ordem-manutencao
