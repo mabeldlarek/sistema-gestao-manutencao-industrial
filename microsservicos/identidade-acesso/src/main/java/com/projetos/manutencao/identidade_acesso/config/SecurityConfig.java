@@ -97,7 +97,7 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowCredentials(false);
-        config.addAllowedOrigin("http://localhost:4200");
+        config.addAllowedOrigin("https://manun-industrial.netlify.app");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         source.registerCorsConfiguration("/**", config);
