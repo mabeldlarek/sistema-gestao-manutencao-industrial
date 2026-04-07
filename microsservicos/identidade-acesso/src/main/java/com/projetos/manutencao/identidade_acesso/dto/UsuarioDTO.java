@@ -28,7 +28,6 @@ public class UsuarioDTO {
     @NotBlank(message = "Tipo de usuário é obrigatório.")
     private String tipoUsuario;
 
-    @NotEmpty(message = "O usuário deve possuir ao menos 1 papel (role).")
     private Set<Role> roles;
 
     public String getNomeUsuario() {
