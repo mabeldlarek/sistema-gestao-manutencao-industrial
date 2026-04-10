@@ -39,7 +39,7 @@ public class TokenController {
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO loginRequest) {
 
-        var user = userRepository.findByNome(loginRequest.username());
+        var user = userRepository.findByNomeUsuario(loginRequest.username());
 
         if (user.isEmpty() || !user.get().isLoginCorrect(loginRequest, passwordEncoder)) {
             throw new BadCredentialsException("user or password is invalid!");
