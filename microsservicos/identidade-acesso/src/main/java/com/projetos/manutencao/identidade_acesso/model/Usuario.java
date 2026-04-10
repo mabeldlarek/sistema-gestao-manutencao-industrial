@@ -20,7 +20,7 @@ public class Usuario {
     private UUID id;
 
     @Column(nullable = false, unique = true)
-    private String nome;
+    private String nomeUsuario;
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -37,7 +37,7 @@ public class Usuario {
     @Column(nullable = false)
     private String tipoUsuario;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable( name = "tb_users_roles", joinColumns = @JoinColumn(name = "user_id" ), inverseJoinColumns = @JoinColumn(name= "role_id"))
     private Set<Role> roles;
 
@@ -100,11 +100,11 @@ public class Usuario {
     }
 
     public String getNome() {
-        return nome;
+        return nomeUsuario;
     }
 
     public void setNome(String nome) {
-        this.nome = nome;
+        this.nomeUsuario = nome;
     }
 
     public UUID getId() {
