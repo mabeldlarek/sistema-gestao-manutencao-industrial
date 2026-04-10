@@ -37,7 +37,7 @@ public class AdminUserConfig implements CommandLineRunner {
             throw new RuntimeException("Role ADMIN não encontrada");
         }
 
-        var userAdmin = userRepository.findByNome("ADMIN");
+        var userAdmin = userRepository.findByNomeUsuario("ADMIN");
 
         userAdmin.ifPresentOrElse(
                 user -> System.out.println("admin já existe"),
